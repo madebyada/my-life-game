@@ -1,0 +1,6353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Life Game</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7fb;
+      color: #222;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: auto;
+      min-height: 100vh;
+      padding: 28px 20px 120px;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .date {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    h1 {
+      margin: 0 0 24px;
+      font-size: 30px;
+    }
+
+    /* =========================
+       等级
+    ========================= */
+
+    .level-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .05);
+    }
+
+    .level-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .progress {
+      height: 10px;
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #222;
+      border-radius: 10px;
+      transition: width .3s ease;
+    }
+
+    .total-xp {
+      margin-top: 10px;
+      color: #999;
+      font-size: 12px;
+    }
+
+    /* =========================
+       今日任务
+    ========================= */
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .clear-today {
+      border: none;
+      background: transparent;
+      color: #999;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .task {
+      background: white;
+      border-radius: 18px;
+      padding: 17px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, .04);
+    }
+
+    .task-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .emoji {
+      font-size: 28px;
+      width: 38px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .task-info {
+      min-width: 0;
+    }
+
+    .task-name {
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    .task-detail {
+      color: #999;
+      font-size: 13px;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .task-buttons {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+
+    .more {
+      border: none;
+      background: #f1f1f3;
+      color: #777;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .plus {
+      border: none;
+      background: #222;
+      color: white;
+      min-width: 54px;
+      height: 50px;
+      padding: 0 13px;
+      border-radius: 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .plus:active {
+      transform: scale(.94);
+    }
+
+    .plus.done {
+      min-width: 88px;
+      background: #e8e8ea;
+      color: #777;
+      font-size: 13px;
+      cursor: default;
+    }
+
+    .add-task {
+      width: 100%;
+      margin-top: 10px;
+      padding: 16px;
+      border: 2px dashed #ccc;
+      background: transparent;
+      border-radius: 16px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .streak {
+      text-align: center;
+      margin-top: 28px;
+      font-weight: 650;
+    }
+
+    .empty {
+      background: white;
+      border-radius: 18px;
+      padding: 30px 20px;
+      color: #999;
+      text-align: center;
+    }
+
+    /* =========================
+       成就页面
+    ========================= */
+
+    .achievement-header {
+      margin-bottom: 22px;
+    }
+
+    .achievement-header h1 {
+      margin-bottom: 6px;
+    }
+
+    .achievement-subtitle {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .achievement-summary {
+      background: #222;
+      color: white;
+      border-radius: 22px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .achievement-summary-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .achievement-summary-label {
+      font-size: 13px;
+      opacity: .7;
+      margin-bottom: 5px;
+    }
+
+    .achievement-summary-number {
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .achievement-summary-percent {
+      font-size: 14px;
+      opacity: .75;
+    }
+
+    .achievement-summary .progress {
+      background: rgba(255,255,255,.18);
+    }
+
+    .achievement-summary .progress-bar {
+      background: white;
+    }
+
+    .achievement-group {
+      margin-bottom: 28px;
+    }
+
+    .achievement-group-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 750;
+      margin-bottom: 12px;
+    }
+
+    .achievement-card {
+      background: white;
+      border-radius: 17px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 13px;
+      align-items: center;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, .035);
+    }
+
+    .achievement-card.locked {
+      opacity: .55;
+    }
+
+    .achievement-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 14px;
+      background: #f2f2f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+      flex-shrink: 0;
+    }
+
+    .achievement-card.unlocked .achievement-icon {
+      background: #222;
+    }
+
+    .achievement-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .achievement-name {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .achievement-desc {
+      color: #999;
+      font-size: 12px;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .achievement-progress-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .achievement-mini-progress {
+      height: 6px;
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .achievement-mini-bar {
+      height: 100%;
+      background: #222;
+      border-radius: 10px;
+    }
+
+    .achievement-progress-text {
+      font-size: 11px;
+      color: #999;
+      min-width: 58px;
+      text-align: right;
+    }
+
+    .unlocked-badge {
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+
+    /* =========================
+       统计页面
+    ========================= */
+
+    .stats-header {
+      margin-bottom: 18px;
+    }
+
+    .stats-header h1 {
+      margin-bottom: 6px;
+    }
+
+    .stats-subtitle {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .period-tabs {
+      display: flex;
+      background: #eceef3;
+      padding: 4px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .period-tab {
+      flex: 1;
+      border: none;
+      background: transparent;
+      border-radius: 11px;
+      padding: 9px 6px;
+      color: #888;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .period-tab.active {
+      background: white;
+      color: #222;
+      font-weight: 750;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+
+    .stats-summary-card {
+      background: #222;
+      color: white;
+      border-radius: 22px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .stats-period-label {
+      font-size: 12px;
+      opacity: .65;
+      margin-bottom: 7px;
+    }
+
+    .stats-main-xp {
+      font-size: 34px;
+      font-weight: 850;
+      margin-bottom: 16px;
+    }
+
+    .stats-main-xp span {
+      font-size: 15px;
+      font-weight: 650;
+      opacity: .7;
+    }
+
+    .stats-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .stats-mini {
+      background: rgba(255,255,255,.09);
+      border-radius: 13px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .stats-mini-number {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .stats-mini-label {
+      font-size: 10px;
+      opacity: .65;
+      margin-top: 3px;
+    }
+
+    .stats-card {
+      background: white;
+      border-radius: 20px;
+      padding: 17px;
+      margin-bottom: 14px;
+      box-shadow: 0 3px 15px rgba(0,0,0,.04);
+    }
+
+    .stats-card-title {
+      font-size: 16px;
+      font-weight: 750;
+      margin-bottom: 4px;
+    }
+
+    .stats-card-subtitle {
+      color: #999;
+      font-size: 11px;
+      margin-bottom: 16px;
+    }
+
+    .trend-chart {
+      height: 160px;
+      display: flex;
+      align-items: stretch;
+      gap: 5px;
+      border-bottom: 1px solid #eee;
+      padding: 8px 2px 0;
+      overflow: hidden;
+    }
+
+    .trend-column {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
+    .trend-value {
+      font-size: 9px;
+      color: #999;
+      height: 15px;
+      white-space: nowrap;
+    }
+
+    .trend-bar-wrap {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .trend-bar {
+      width: min(18px, 72%);
+      min-height: 2px;
+      background: #222;
+      border-radius: 6px 6px 2px 2px;
+    }
+
+    .trend-label {
+      height: 24px;
+      padding-top: 6px;
+      color: #999;
+      font-size: 9px;
+      white-space: nowrap;
+    }
+
+    .task-stat-row {
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f2;
+    }
+
+    .task-stat-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .task-stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .task-stat-name {
+      min-width: 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .task-stat-xp {
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .task-stat-detail {
+      color: #999;
+      font-size: 12px;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .stats-empty-small {
+      color: #aaa;
+      text-align: center;
+      font-size: 13px;
+      padding: 20px 4px 10px;
+    }
+
+    .heatmap-year-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 12px 0 14px;
+      background: #f6f7f9;
+      border-radius: 14px;
+      padding: 7px;
+    }
+
+    .heatmap-year-btn {
+      width: 38px;
+      height: 34px;
+      border: none;
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      font-size: 18px;
+      color: #333;
+      box-shadow: 0 1px 5px rgba(0,0,0,.04);
+    }
+
+    .heatmap-year-btn:disabled {
+      opacity: .25;
+      cursor: default;
+    }
+
+    .heatmap-year-label {
+      flex: 1;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .heatmap-wrap {
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .heatmap {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: repeat(7, 11px);
+      grid-auto-columns: 11px;
+      gap: 3px;
+      width: max-content;
+      min-width: 100%;
+    }
+
+    .heat-cell {
+      width: 11px;
+      height: 11px;
+      border-radius: 3px;
+      background: #eceef2;
+    }
+
+    .heat-cell.level-1 { background: #cfd2d9; }
+    .heat-cell.level-2 { background: #9fa4ae; }
+    .heat-cell.level-3 { background: #666d78; }
+    .heat-cell.level-4 { background: #222; }
+
+    .heat-legend {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 4px;
+      margin-top: 10px;
+      color: #aaa;
+      font-size: 10px;
+    }
+
+    .heat-legend-box {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: #eceef2;
+    }
+
+    .heat-legend-box.l1 { background: #cfd2d9; }
+    .heat-legend-box.l2 { background: #9fa4ae; }
+    .heat-legend-box.l3 { background: #666d78; }
+    .heat-legend-box.l4 { background: #222; }
+
+    .period-note {
+      text-align: center;
+      color: #aaa;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+
+    /* =========================
+       底部导航
+    ========================= */
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, .96);
+      display: flex;
+      justify-content: space-around;
+      padding: 16px 10px 24px;
+      border-top: 1px solid #eee;
+      z-index: 10;
+    }
+
+    .nav-item {
+      color: #999;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    .nav-item.active {
+      color: #222;
+      font-weight: 700;
+    }
+
+    /* =========================
+       弹窗
+    ========================= */
+
+    .modal-bg {
+      display: none;
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      background: rgba(0, 0, 0, .38);
+      padding: 20px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-bg.show {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 24px;
+      padding: 24px;
+    }
+
+    .modal h2 {
+      margin: 0 0 20px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 12px;
+      outline: none;
+      background: white;
+    }
+
+    .setting-card {
+      background: #f7f7f9;
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 16px;
+    }
+
+    .setting-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .choice-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .choice {
+      flex: 1;
+      position: relative;
+    }
+
+    .choice input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choice label {
+      display: block;
+      text-align: center;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 11px 8px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .choice input:checked + label {
+      background: #222;
+      color: white;
+      border-color: #222;
+    }
+
+    .help {
+      font-size: 12px;
+      color: #999;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+    }
+
+    .checkbox-row input {
+      width: auto;
+      margin: 0;
+    }
+
+    .fixed-settings,
+    .amount-settings {
+      margin-top: 15px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .custom-unit {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .custom-unit.show {
+      display: block;
+    }
+
+    .xp-equation {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .xp-equation input {
+      width: 75px;
+      text-align: center;
+    }
+
+    .xp-equation span {
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      flex: 1;
+      border: none;
+      border-radius: 13px;
+      padding: 13px;
+      cursor: pointer;
+    }
+
+    .btn-light {
+      background: #eee;
+    }
+
+    .btn-dark {
+      background: #222;
+      color: white;
+    }
+
+    .undo-button {
+      width: 100%;
+      border: none;
+      border-radius: 13px;
+      padding: 13px;
+      margin-top: 12px;
+      background: #f1f1f3;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .btn-danger {
+      width: 100%;
+      border: none;
+      border-radius: 13px;
+      padding: 13px;
+      margin-top: 10px;
+      background: #fff0f0;
+      color: #c73535;
+      cursor: pointer;
+    }
+
+    /* =========================
+       完成量弹窗
+    ========================= */
+
+    .complete-icon {
+      text-align: center;
+      font-size: 38px;
+      margin-bottom: 6px;
+    }
+
+    .complete-name {
+      text-align: center;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 22px;
+    }
+
+    .amount-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .amount-input-wrap input {
+      flex: 1;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .amount-unit {
+      min-width: 55px;
+      font-weight: 650;
+    }
+
+    .xp-preview {
+      text-align: center;
+      font-weight: 700;
+      margin: 18px 0 5px;
+      font-size: 17px;
+    }
+
+    /* =========================
+       撤销今日
+    ========================= */
+
+    .clear-icon {
+      text-align: center;
+      font-size: 38px;
+      margin-bottom: 8px;
+    }
+
+    .clear-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 750;
+      margin-bottom: 8px;
+    }
+
+    .clear-summary {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .today-records {
+      background: #f7f7f9;
+      border-radius: 15px;
+      padding: 12px 14px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .today-record {
+      padding: 8px 0;
+      border-bottom: 1px solid #e8e8ea;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .today-record:last-child {
+      border-bottom: none;
+    }
+
+    /* =========================
+       成就解锁弹窗
+    ========================= */
+
+    .unlock-modal {
+      text-align: center;
+    }
+
+    .unlock-sparkle {
+      font-size: 16px;
+      color: #999;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .unlock-icon {
+      font-size: 64px;
+      margin-bottom: 12px;
+    }
+
+    .unlock-label {
+      font-size: 12px;
+      color: #999;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .unlock-name {
+      font-size: 25px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .unlock-desc {
+      color: #777;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* =========================
+       Toast
+    ========================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 105px;
+      transform: translateX(-50%) translateY(20px);
+      background: #222;
+      color: white;
+      padding: 11px 18px;
+      border-radius: 30px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+      z-index: 30;
+      white-space: nowrap;
+      max-width: calc(100% - 30px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.clickable {
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- =========================
+       今日页面
+  ========================= -->
+
+  <div class="page active" id="todayPage">
+
+    <div class="date" id="date"></div>
+
+    <h1>✨ TODAY</h1>
+
+
+    <div class="level-card">
+
+      <div class="level-row">
+
+        <span id="level">
+          Lv. 1
+        </span>
+
+        <span id="xpDisplay">
+          0 / 100 XP
+        </span>
+
+      </div>
+
+
+      <div class="progress">
+
+        <div
+          class="progress-bar"
+          id="progressBar"
+        ></div>
+
+      </div>
+
+
+      <div
+        class="total-xp"
+        id="totalXp"
+      >
+        累计获得 0 XP
+      </div>
+
+    </div>
+
+
+    <div class="section-header">
+
+      <div class="section-title">
+        今日任务
+      </div>
+
+
+      <button
+        class="clear-today"
+        onclick="openClearTodayModal()"
+      >
+        ↩ 撤销今日记录
+      </button>
+
+    </div>
+
+
+    <div id="taskList"></div>
+
+
+    <button
+      class="add-task"
+      onclick="openAddModal()"
+    >
+      ＋ 添加任务
+    </button>
+
+
+    <div
+      class="streak"
+      id="streak"
+    >
+      🔥 连续坚持 0 天
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       成就页面
+  ========================= -->
+
+  <div
+    class="page"
+    id="achievementPage"
+  >
+
+    <div class="achievement-header">
+
+      <h1>🏆 成就</h1>
+
+      <div class="achievement-subtitle">
+        记录现实里的成长，解锁属于你的里程碑。
+      </div>
+
+    </div>
+
+
+    <div
+      class="achievement-summary"
+      id="achievementSummary"
+    ></div>
+
+
+    <div id="achievementList"></div>
+
+  </div>
+
+
+  <!-- =========================
+       统计页面
+  ========================= -->
+
+  <div
+    class="page"
+    id="statsPage"
+  >
+
+    <div class="stats-header">
+
+      <h1>📊 统计</h1>
+
+      <div class="stats-subtitle">
+        看见自己的行动轨迹。
+      </div>
+
+    </div>
+
+
+    <div class="period-tabs">
+
+      <button
+        class="period-tab active"
+        id="weekTab"
+        onclick="setStatsPeriod('week')"
+      >
+        本周
+      </button>
+
+      <button
+        class="period-tab"
+        id="monthTab"
+        onclick="setStatsPeriod('month')"
+      >
+        本月
+      </button>
+
+      <button
+        class="period-tab"
+        id="yearTab"
+        onclick="setStatsPeriod('year')"
+      >
+        本年
+      </button>
+
+    </div>
+
+
+    <div
+      class="stats-summary-card"
+      id="statsSummary"
+    ></div>
+
+
+    <div class="stats-card">
+
+      <div class="stats-card-title">
+        📈 XP 趋势
+      </div>
+
+      <div
+        class="stats-card-subtitle"
+        id="trendSubtitle"
+      ></div>
+
+      <div
+        class="trend-chart"
+        id="trendChart"
+      ></div>
+
+      <div
+        class="period-note"
+        id="trendNote"
+      ></div>
+
+    </div>
+
+
+    <div class="stats-card">
+
+      <div class="stats-card-title">
+        🏆 任务记录
+      </div>
+
+      <div class="stats-card-subtitle">
+        按量任务显示累计完成量；普通任务显示完成次数。
+      </div>
+
+      <div id="taskStats"></div>
+
+    </div>
+
+
+    <div class="stats-card">
+
+      <div class="stats-card-title">
+        📅 年度活跃地图
+      </div>
+
+      <div class="stats-card-subtitle">
+        可以翻回过去的年份查看足迹；每个小格代表一天。
+      </div>
+
+
+      <div class="heatmap-year-nav">
+
+        <button
+          class="heatmap-year-btn"
+          id="prevHeatmapYear"
+          onclick="changeHeatmapYear(-1)"
+          aria-label="上一年"
+        >
+          ‹
+        </button>
+
+        <div
+          class="heatmap-year-label"
+          id="heatmapYear"
+        ></div>
+
+        <button
+          class="heatmap-year-btn"
+          id="nextHeatmapYear"
+          onclick="changeHeatmapYear(1)"
+          aria-label="下一年"
+        >
+          ›
+        </button>
+
+      </div>
+
+
+      <div class="heatmap-wrap">
+
+        <div
+          class="heatmap"
+          id="heatmap"
+        ></div>
+
+      </div>
+
+
+      <div class="heat-legend">
+        少
+        <span class="heat-legend-box"></span>
+        <span class="heat-legend-box l1"></span>
+        <span class="heat-legend-box l2"></span>
+        <span class="heat-legend-box l3"></span>
+        <span class="heat-legend-box l4"></span>
+        多
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     底部导航
+========================= -->
+
+<div class="bottom-nav">
+
+  <button
+    class="nav-item active"
+    id="todayNav"
+    onclick="switchPage('today')"
+  >
+    🏠 今日
+  </button>
+
+
+  <button
+    class="nav-item"
+    id="achievementNav"
+    onclick="switchPage('achievement')"
+  >
+    🏆 成就
+  </button>
+
+
+  <button
+    class="nav-item"
+    id="statsNav"
+    onclick="switchPage('stats')"
+  >
+    📊 统计
+  </button>
+
+</div>
+
+
+<!-- =========================
+     创建 / 编辑任务
+========================= -->
+
+<div
+  class="modal-bg"
+  id="taskModal"
+>
+
+  <div class="modal">
+
+    <h2 id="modalTitle">
+      创建任务
+    </h2>
+
+
+    <div class="field">
+
+      <label>
+        任务名称
+      </label>
+
+      <input
+        id="taskName"
+        type="text"
+        placeholder="例如：打扫卫生"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        图标 Emoji
+      </label>
+
+      <input
+        id="taskEmoji"
+        type="text"
+        value="⭐"
+      >
+
+    </div>
+    <div class="setting-card">
+
+      <div class="setting-title">
+        怎么获得 XP？
+      </div>
+
+
+      <div class="choice-row">
+
+        <div class="choice">
+
+          <input
+            type="radio"
+            name="scoreMode"
+            id="modeFixed"
+            value="fixed"
+            checked
+            onchange="updateScoreMode()"
+          >
+
+          <label for="modeFixed">
+            ✓ 完成任务
+          </label>
+
+        </div>
+
+
+        <div class="choice">
+
+          <input
+            type="radio"
+            name="scoreMode"
+            id="modeAmount"
+            value="amount"
+            onchange="updateScoreMode()"
+          >
+
+          <label for="modeAmount">
+            ⏱ 按完成量
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="fixed-settings"
+        id="fixedSettings"
+      >
+
+        <div class="field">
+
+          <label>
+            完成一次获得多少 XP？
+          </label>
+
+          <input
+            id="fixedXp"
+            type="number"
+            value="5"
+            min="0.1"
+            step="any"
+          >
+
+        </div>
+
+
+        <label class="checkbox-row">
+
+          <input
+            id="oncePerDay"
+            type="checkbox"
+          >
+
+          每天只能完成一次
+
+        </label>
+
+      </div>
+
+
+      <div
+        class="amount-settings hidden"
+        id="amountSettings"
+      >
+
+        <div class="field">
+
+          <label>
+            用什么单位记录？
+          </label>
+
+          <select
+            id="amountUnit"
+            onchange="updateCustomUnit()"
+          >
+
+            <option value="分钟">分钟</option>
+            <option value="小时">小时</option>
+            <option value="页">页</option>
+            <option value="件">件</option>
+            <option value="个">个</option>
+            <option value="ml">ml</option>
+            <option value="miles">miles</option>
+            <option value="$">$</option>
+
+            <option value="custom">
+              自定义...
+            </option>
+
+          </select>
+
+
+          <input
+            class="custom-unit"
+            id="customUnit"
+            type="text"
+            placeholder="例如：单词"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            XP 换算
+          </label>
+
+
+          <div class="xp-equation">
+
+            <span>每</span>
+
+            <input
+              id="amountBase"
+              type="number"
+              value="1"
+              min="0.01"
+              step="any"
+            >
+
+            <span id="unitPreview">
+              分钟
+            </span>
+
+            <span>=</span>
+
+            <input
+              id="xpPerBase"
+              type="number"
+              value="1"
+              min="0.01"
+              step="any"
+            >
+
+            <span>XP</span>
+
+          </div>
+
+
+          <div class="help">
+            例如：每 1 分钟 = 1 XP，
+            打扫 7 分钟就获得 7 XP。
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="btn btn-light"
+        onclick="closeTaskModal()"
+      >
+        取消
+      </button>
+
+
+      <button
+        class="btn btn-dark"
+        onclick="saveTask()"
+      >
+        保存
+      </button>
+
+    </div>
+
+
+    <button
+      class="undo-button"
+      id="undoTaskButton"
+      onclick="undoRecentTask()"
+      style="display:none;"
+    >
+      ↩️ 撤销最近一次完成
+    </button>
+
+
+    <button
+      class="btn-danger"
+      id="deleteButton"
+      onclick="deleteTask()"
+      style="display:none;"
+    >
+      🗑 删除这个任务
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     按完成量弹窗
+========================= -->
+
+<div
+  class="modal-bg"
+  id="amountModal"
+>
+
+  <div class="modal">
+
+    <div
+      class="complete-icon"
+      id="completeEmoji"
+    >
+      🧹
+    </div>
+
+
+    <div
+      class="complete-name"
+      id="completeName"
+    >
+      打扫卫生
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        这次完成了多少？
+      </label>
+
+
+      <div class="amount-input-wrap">
+
+        <input
+          id="completeAmount"
+          type="number"
+          min="0"
+          step="any"
+        >
+
+        <span
+          class="amount-unit"
+          id="completeUnit"
+        >
+          分钟
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="xp-preview"
+      id="xpPreview"
+    >
+      获得 +0 XP
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="btn btn-light"
+        onclick="closeAmountModal()"
+      >
+        取消
+      </button>
+
+
+      <button
+        class="btn btn-dark"
+        onclick="confirmAmountCompletion()"
+      >
+        完成
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     撤销今日
+========================= -->
+
+<div
+  class="modal-bg"
+  id="clearTodayModal"
+>
+
+  <div class="modal">
+
+    <div class="clear-icon">
+      ↩️
+    </div>
+
+
+    <div class="clear-title">
+      撤销今天所有行动？
+    </div>
+
+
+    <div
+      class="clear-summary"
+      id="clearTodaySummary"
+    ></div>
+
+
+    <div
+      class="today-records"
+      id="todayRecordList"
+    ></div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="btn btn-light"
+        onclick="closeClearTodayModal()"
+      >
+        取消
+      </button>
+
+
+      <button
+        class="btn btn-dark"
+        onclick="clearTodayRecords()"
+      >
+        全部撤销
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     成就解锁弹窗
+========================= -->
+
+<div
+  class="modal-bg"
+  id="unlockModal"
+>
+
+  <div class="modal unlock-modal">
+
+    <div class="unlock-sparkle">
+      ✦ ACHIEVEMENT ✦
+    </div>
+
+
+    <div
+      class="unlock-icon"
+      id="unlockIcon"
+    >
+      🏆
+    </div>
+
+
+    <div class="unlock-label">
+      成就解锁
+    </div>
+
+
+    <div
+      class="unlock-name"
+      id="unlockName"
+    ></div>
+
+
+    <div
+      class="unlock-desc"
+      id="unlockDesc"
+    ></div>
+
+
+    <button
+      class="btn btn-dark"
+      onclick="closeUnlockModal()"
+      style="width:100%;"
+    >
+      收下成就
+    </button>
+
+  </div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+
+  /* =========================================
+     数据
+  ========================================= */
+
+  const STORAGE_KEY =
+    "myLifeGameDataV2";
+
+
+  let data =
+    loadData();
+
+
+  let editingTaskId =
+    null;
+
+
+  let completingTaskId =
+    null;
+
+
+  let currentPage =
+    "today";
+
+
+  let statsPeriod =
+    "week";
+
+
+  let heatmapYear =
+    new Date().getFullYear();
+
+
+  function makeId() {
+
+    return (
+      Date.now().toString(36)
+      +
+      Math.random().toString(36).slice(2)
+    );
+
+  }
+
+
+  function defaultData() {
+
+    return {
+
+      tasks: [
+
+        {
+          id: makeId(),
+          name: "打扫卫生",
+          emoji: "🧹",
+          scoreMode: "amount",
+          unit: "分钟",
+          amountBase: 1,
+          xpPerBase: 1,
+          fixedXp: 5,
+          oncePerDay: false
+        },
+
+        {
+          id: makeId(),
+          name: "多邻国学习",
+          emoji: "🦉",
+          scoreMode: "amount",
+          unit: "分钟",
+          amountBase: 1,
+          xpPerBase: 1,
+          fixedXp: 5,
+          oncePerDay: false
+        },
+
+        {
+          id: makeId(),
+          name: "12点前睡觉",
+          emoji: "😴",
+          scoreMode: "fixed",
+          fixedXp: 10,
+          oncePerDay: true,
+          unit: "",
+          amountBase: 1,
+          xpPerBase: 1
+        }
+
+      ],
+
+      history: [],
+
+      unlockedAchievements: []
+
+    };
+
+  }
+
+
+  function loadData() {
+
+    const saved =
+      localStorage.getItem(
+        STORAGE_KEY
+      );
+
+
+    let loaded;
+
+
+    if (saved) {
+
+      try {
+
+        loaded =
+          JSON.parse(saved);
+
+      } catch (error) {
+
+        console.error(
+          "读取数据失败",
+          error
+        );
+
+      }
+
+    }
+
+
+    if (!loaded) {
+
+      loaded =
+        defaultData();
+
+    }
+
+
+    loaded.tasks =
+      Array.isArray(loaded.tasks)
+        ? loaded.tasks
+        : [];
+
+
+    loaded.history =
+      Array.isArray(loaded.history)
+        ? loaded.history
+        : [];
+
+
+    if (
+      !Array.isArray(
+        loaded.unlockedAchievements
+      )
+    ) {
+
+      loaded.unlockedAchievements =
+        [];
+
+    }
+
+
+    loaded.tasks.forEach(
+      task => {
+
+        if (!task.scoreMode) {
+          task.scoreMode = "fixed";
+        }
+
+
+        if (
+          typeof task.fixedXp !==
+          "number"
+        ) {
+
+          task.fixedXp =
+            Number(task.xp || 5);
+
+        }
+
+
+        if (
+          typeof task.oncePerDay !==
+          "boolean"
+        ) {
+
+          task.oncePerDay =
+            typeof task.repeatable === "boolean"
+              ? !task.repeatable
+              : false;
+
+        }
+
+
+        if (
+          typeof task.unit !==
+          "string"
+        ) {
+
+          task.unit = "";
+
+        }
+
+
+        if (
+          typeof task.amountBase !==
+          "number"
+        ) {
+
+          task.amountBase = 1;
+
+        }
+
+
+        if (
+          typeof task.xpPerBase !==
+          "number"
+        ) {
+
+          task.xpPerBase = 1;
+
+        }
+}
+    );
+
+
+    loaded.history.forEach(
+      record => {
+
+        if (
+          !("amount" in record)
+        ) {
+
+          if (
+            record.quantity !== null &&
+            record.quantity !== undefined
+          ) {
+
+            record.amount =
+              Number(record.quantity);
+
+          } else {
+
+            record.amount =
+              null;
+
+          }
+
+        }
+
+
+        if (
+          !("unit" in record)
+        ) {
+
+          record.unit = "";
+
+        }
+
+
+        if (
+          typeof record.isAmountRecord !==
+          "boolean"
+        ) {
+
+          record.isAmountRecord =
+            (
+              record.amount !== null &&
+              record.amount !== undefined &&
+              Number(record.amount) > 0
+            );
+
+        }
+
+      }
+    );
+
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(loaded)
+    );
+
+
+    return loaded;
+
+  }
+
+
+  function saveData() {
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(data)
+    );
+
+  }
+
+
+  /* =========================================
+     页面切换
+  ========================================= */
+
+  function switchPage(
+    page
+  ) {
+
+    currentPage =
+      page;
+
+
+    document
+      .querySelectorAll(
+        ".page"
+      )
+      .forEach(
+        element =>
+          element.classList.remove(
+            "active"
+          )
+      );
+
+
+    document
+      .querySelectorAll(
+        ".nav-item"
+      )
+      .forEach(
+        element =>
+          element.classList.remove(
+            "active"
+          )
+      );
+
+
+    if (
+      page === "today"
+    ) {
+
+      document
+        .getElementById(
+          "todayPage"
+        )
+        .classList.add(
+          "active"
+        );
+
+
+      document
+        .getElementById(
+          "todayNav"
+        )
+        .classList.add(
+          "active"
+        );
+
+    }
+
+
+    if (
+      page === "achievement"
+    ) {
+
+      document
+        .getElementById(
+          "achievementPage"
+        )
+        .classList.add(
+          "active"
+        );
+
+
+      document
+        .getElementById(
+          "achievementNav"
+        )
+        .classList.add(
+          "active"
+        );
+
+
+      renderAchievements();
+
+    }
+
+
+    if (
+      page === "stats"
+    ) {
+
+      document
+        .getElementById(
+          "statsPage"
+        )
+        .classList.add(
+          "active"
+        );
+
+
+      document
+        .getElementById(
+          "statsNav"
+        )
+        .classList.add(
+          "active"
+        );
+
+
+      renderStats();
+
+    }
+
+
+    window.scrollTo(
+      0,
+      0
+    );
+
+  }
+
+
+  /* =========================================
+     日期
+  ========================================= */
+
+  function getDateKey(
+    date = new Date()
+  ) {
+
+    const year =
+      date.getFullYear();
+
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    return `${year}-${month}-${day}`;
+
+  }
+
+
+  function showDate() {
+
+    document
+      .getElementById(
+        "date"
+      )
+      .innerText =
+      new Date().toLocaleDateString(
+        "zh-CN",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long"
+        }
+      );
+
+  }
+
+
+  /* =========================================
+     今日记录
+  ========================================= */
+
+  function getTodayRecords(
+    taskId
+  ) {
+
+    const today =
+      getDateKey();
+
+
+    return data.history.filter(
+      record =>
+        record.taskId === taskId &&
+        record.date === today
+    );
+
+  }
+
+
+  function getTodayAmountRecords(
+    taskId
+  ) {
+
+    return getTodayRecords(
+      taskId
+    ).filter(
+      record =>
+        record.isAmountRecord === true
+    );
+
+  }
+
+
+  function getTodayAmount(
+    taskId
+  ) {
+
+    return getTodayAmountRecords(
+      taskId
+    ).reduce(
+      (total, record) =>
+        total +
+        Number(record.amount || 0),
+      0
+    );
+
+  }
+
+
+  function getTodayAmountXp(
+    taskId
+  ) {
+
+    return getTodayAmountRecords(
+      taskId
+    ).reduce(
+      (total, record) =>
+        total +
+        Number(record.xp || 0),
+      0
+    );
+
+  }
+
+
+  function getTodayAllXp(
+    taskId
+  ) {
+
+    return getTodayRecords(
+      taskId
+    ).reduce(
+      (total, record) =>
+        total +
+        Number(record.xp || 0),
+      0
+    );
+
+  }
+
+
+  /* =========================================
+     格式
+  ========================================= */
+
+  function formatNumber(
+    value
+  ) {
+
+    const number =
+      Number(value);
+
+
+    if (
+      Number.isInteger(number)
+    ) {
+
+      return number.toString();
+
+    }
+
+
+    return number
+      .toFixed(2)
+      .replace(
+        /\.?0+$/,
+        ""
+      );
+
+  }
+
+
+  function formatAmount(
+    amount,
+    unit
+  ) {
+
+    const number =
+      formatNumber(
+        amount
+      );
+
+
+    if (
+      unit === "$"
+    ) {
+
+      return `$${number}`;
+
+    }
+
+
+    return `${number} ${unit}`;
+
+  }
+
+
+  function escapeHtml(
+    value
+  ) {
+
+    const div =
+      document.createElement(
+        "div"
+      );
+
+
+    div.textContent =
+      String(value);
+
+
+    return div.innerHTML;
+
+  }
+
+
+  /* =========================================
+     今日任务
+  ========================================= */
+
+  function renderTasks() {
+
+    const list =
+      document.getElementById(
+        "taskList"
+      );
+
+
+    list.innerHTML =
+      "";
+
+
+    if (
+      data.tasks.length === 0
+    ) {
+
+      list.innerHTML = `
+        <div class="empty">
+          还没有任务。<br>
+          添加你的第一个任务吧 ✨
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    data.tasks.forEach(
+      task => {
+
+        const allTodayRecords =
+          getTodayRecords(
+            task.id
+          );
+
+
+        let detail =
+          "";
+
+
+        let button =
+          "";
+
+
+        if (
+          task.scoreMode ===
+          "amount"
+        ) {
+
+          const amountRecords =
+            getTodayAmountRecords(
+              task.id
+            );
+
+
+          const amount =
+            getTodayAmount(
+              task.id
+            );
+
+
+          const amountXp =
+            getTodayAmountXp(
+              task.id
+            );
+
+
+          if (
+            amountRecords.length === 0
+          ) {
+
+            detail =
+              `今天还没有记录 · 按${escapeHtml(task.unit)}获得 XP`;
+
+          } else {
+
+            detail =
+              `今天 ${escapeHtml(
+                formatAmount(
+                  amount,
+                  task.unit
+                )
+              )} · +${formatNumber(amountXp)} XP`;
+
+          }
+
+
+          button = `
+            <button
+              class="plus"
+              onclick="startCompletion('${task.id}')"
+            >
+              +
+            </button>
+          `;
+
+        } else {
+
+          const todayXp =
+            getTodayAllXp(
+              task.id
+            );
+
+
+          const completedToday =
+            allTodayRecords.length > 0;
+
+
+          if (
+            task.oncePerDay
+          ) {
+
+            detail =
+              completedToday
+                ? `今天已完成 · +${formatNumber(todayXp)} XP`
+                : `完成 +${formatNumber(task.fixedXp)} XP`;
+
+
+            button =
+              completedToday
+                ? `
+                  <button
+                    class="plus done"
+                    disabled
+                  >
+                    ✓ 已完成
+                  </button>
+                `
+                : `
+                  <button
+                    class="plus"
+                    onclick="startCompletion('${task.id}')"
+                  >
+                    +${formatNumber(task.fixedXp)}
+                  </button>
+                `;
+
+          } else {
+
+            detail =
+              allTodayRecords.length === 0
+                ? `完成一次 +${formatNumber(task.fixedXp)} XP`
+                : `今天完成 ${allTodayRecords.length} 次 · +${formatNumber(todayXp)} XP`;
+
+
+            button = `
+              <button
+                class="plus"
+                onclick="startCompletion('${task.id}')"
+              >
+                +${formatNumber(task.fixedXp)}
+              </button>
+            `;
+
+          }
+
+        }
+
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+
+        div.className =
+          "task";
+
+
+        div.innerHTML = `
+
+          <div class="task-left">
+
+            <div class="emoji">
+              ${escapeHtml(task.emoji)}
+            </div>
+
+            <div class="task-info">
+
+              <div class="task-name">
+                ${escapeHtml(task.name)}
+              </div>
+
+              <div class="task-detail">
+                ${detail}
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="task-buttons">
+
+            <button
+              class="more"
+              onclick="openEditModal('${task.id}')"
+            >
+              •••
+            </button>
+
+            ${button}
+
+          </div>
+
+        `;
+
+
+        list.appendChild(
+          div
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =========================================
+     全局成就系统
+  ========================================= */
+
+  function getActiveDateSet() {
+
+    return new Set(
+      data.history.map(
+        record =>
+          record.date
+      )
+    );
+
+  }
+
+
+  function getDistinctTaskCount() {
+
+    return new Set(
+      data.history.map(
+        record =>
+          record.taskId
+      )
+    ).size;
+
+  }
+
+
+  function getMaxActionsInOneDay() {
+
+    const counts = {};
+
+
+    data.history.forEach(
+      record => {
+
+        counts[record.date] =
+          (counts[record.date] || 0) + 1;
+
+      }
+    );
+
+
+    const values =
+      Object.values(counts);
+
+
+    return values.length
+      ? Math.max(...values)
+      : 0;
+
+  }
+
+
+  function getAchievementSeries(
+    prefix,
+    milestones,
+    current,
+    names,
+    icons,
+    descriptions
+  ) {
+
+    return milestones.map(
+      (target, index) => ({
+
+        id:
+          `${prefix}-${target}`,
+
+        icon:
+          icons[index],
+
+        name:
+          names[index],
+
+        description:
+          descriptions[index]
+            .replace(
+              "{target}",
+              target.toLocaleString()
+            ),
+
+        current:
+          current,
+
+        target:
+          target,
+
+        unlocked:
+          current >= target
+
+      })
+    );
+
+  }
+
+
+  function getGlobalAchievementGroups() {
+
+    const totalXp =
+      getTotalXp();
+
+
+    const totalActions =
+      data.history.length;
+
+
+    const streak =
+      calculateStreak();
+
+
+    const activeDays =
+      getActiveDateSet().size;
+
+
+    const distinctTasks =
+      getDistinctTaskCount();
+
+
+    const maxDailyActions =
+      getMaxActionsInOneDay();
+
+
+    return [
+
+      {
+        icon: "🌱",
+        title: "人生启动",
+        subtitle: "每一次行动，都算数。",
+        achievements:
+          getAchievementSeries(
+            "action",
+            [1, 10, 50, 100, 500, 1000],
+            totalActions,
+            [
+              "游戏开始",
+              "行动起来",
+              "渐入佳境",
+              "百次行动",
+              "势不可挡",
+              "千次人生"
+            ],
+            [
+              "🌱",
+              "🎯",
+              "✨",
+              "💯",
+              "🚀",
+              "👑"
+            ],
+            [
+              "完成你的第一次行动",
+              "累计完成 {target} 次行动",
+              "累计完成 {target} 次行动",
+              "累计完成 {target} 次行动",
+              "累计完成 {target} 次行动",
+              "累计完成 {target} 次行动"
+            ]
+          )
+      },
+
+
+      {
+        icon: "⚡",
+        title: "经验之路",
+        subtitle: "把现实生活一点点变成经验值。",
+        achievements:
+          getAchievementSeries(
+            "xp",
+            [100, 500, 1000, 2500, 5000, 10000],
+            totalXp,
+            [
+              "能量初现",
+              "经验猎人",
+              "千点经验",
+              "经验蓄能",
+              "成长玩家",
+              "万点人生"
+            ],
+            [
+              "⚡",
+              "💎",
+              "🌟",
+              "🔮",
+              "🏆",
+              "👑"
+            ],
+            [
+              "累计获得 {target} XP",
+              "累计获得 {target} XP",
+              "累计获得 {target} XP",
+              "累计获得 {target} XP",
+              "累计获得 {target} XP",
+              "累计获得 {target} XP"
+            ]
+          )
+      },
+
+
+      {
+        icon: "🔥",
+        title: "连续坚持",
+        subtitle: "连续出现，比偶尔完美更难。",
+        achievements:
+          getAchievementSeries(
+            "streak",
+            [3, 7, 14, 30, 60, 100, 365],
+            streak,
+            [
+              "三日连击",
+              "一周坚持",
+              "两周成习",
+              "月度坚持者",
+              "稳定前行",
+              "百日征程",
+              "一年不息"
+            ],
+            [
+              "🔥",
+              "🔥",
+              "🌟",
+              "🌙",
+              "💫",
+              "🏅",
+              "👑"
+            ],
+            [
+              "连续有行动 {target} 天",
+              "连续有行动 {target} 天",
+              "连续有行动 {target} 天",
+              "连续有行动 {target} 天",
+              "连续有行动 {target} 天",
+              "连续有行动 {target} 天",
+              "连续有行动 {target} 天"
+            ]
+          )
+      },
+
+
+      {
+        icon: "📅",
+        title: "生活足迹",
+        subtitle: "中断没关系，回来继续就算成长。",
+        achievements:
+          getAchievementSeries(
+            "active-days",
+            [7, 30, 100, 200, 365],
+            activeDays,
+            [
+              "七日足迹",
+              "月光轨迹",
+              "百日生活",
+              "长线玩家",
+              "一年足迹"
+            ],
+            [
+              "📅",
+              "🗓️",
+              "🌿",
+              "🛤️",
+              "🌍"
+            ],
+            [
+              "累计有行动记录 {target} 天",
+              "累计有行动记录 {target} 天",
+              "累计有行动记录 {target} 天",
+              "累计有行动记录 {target} 天",
+              "累计有行动记录 {target} 天"
+            ]
+          )
+      },
+
+
+      {
+        icon: "🌈",
+        title: "生活探索",
+        subtitle: "人生不只有一条经验条。",
+        achievements:
+          getAchievementSeries(
+            "variety",
+            [2, 3, 5, 10, 20],
+            distinctTasks,
+            [
+              "第二条支线",
+              "三线并进",
+              "生活展开",
+              "十种可能",
+              "生活收藏家"
+            ],
+            [
+              "🌱",
+              "🌿",
+              "🌈",
+              "🧭",
+              "🗺️"
+            ],
+            [
+              "至少完成过 {target} 个不同任务",
+              "至少完成过 {target} 个不同任务",
+              "至少完成过 {target} 个不同任务",
+              "至少完成过 {target} 个不同任务",
+              "至少完成过 {target} 个不同任务"
+            ]
+          )
+      },
+
+
+      {
+        icon: "🚀",
+        title: "高能时刻",
+        subtitle: "有些日子，就是特别能打。",
+        achievements:
+          getAchievementSeries(
+            "daily-actions",
+            [3, 5, 10, 20],
+            maxDailyActions,
+            [
+              "今日开挂",
+              "状态在线",
+              "高能一天",
+              "极限日"
+            ],
+            [
+              "✨",
+              "⚡",
+              "🚀",
+              "🌋"
+            ],
+            [
+              "单日完成过 {target} 次行动",
+              "单日完成过 {target} 次行动",
+              "单日完成过 {target} 次行动",
+              "单日完成过 {target} 次行动"
+            ]
+          )
+      }
+
+    ];
+
+  }
+
+
+  function getAllAchievements() {
+
+    return getGlobalAchievementGroups()
+      .flatMap(
+        group =>
+          group.achievements
+      );
+
+  }
+
+
+  /*
+    记录已经真正解锁过的成就。
+    撤销记录后不会反复弹出同一个已获得成就。
+  */
+
+  function checkNewAchievements() {
+
+    const achievements =
+      getAllAchievements();
+
+
+    const newAchievement =
+      achievements.find(
+        achievement =>
+          achievement.unlocked &&
+          !data.unlockedAchievements.includes(
+            achievement.id
+          )
+      );
+
+
+    if (
+      !newAchievement
+    ) {
+
+      return;
+
+    }
+
+
+    data.unlockedAchievements.push(
+      newAchievement.id
+    );
+
+
+    saveData();
+
+
+    showUnlockModal(
+      newAchievement
+    );
+
+  }
+
+
+  function showUnlockModal(
+    achievement
+  ) {
+
+    document
+      .getElementById(
+        "unlockIcon"
+      )
+      .innerText =
+      achievement.icon;
+
+
+    document
+      .getElementById(
+        "unlockName"
+      )
+      .innerText =
+      achievement.name;
+
+
+    document
+      .getElementById(
+        "unlockDesc"
+      )
+      .innerText =
+      achievement.description;
+
+
+    document
+      .getElementById(
+        "unlockModal"
+      )
+      .classList.add(
+        "show"
+      );
+
+  }
+
+
+  function closeUnlockModal() {
+
+    document
+      .getElementById(
+        "unlockModal"
+      )
+      .classList.remove(
+        "show"
+      );
+
+
+    setTimeout(
+      checkNewAchievements,
+      150
+    );
+
+  }
+
+
+  function renderAchievementCard(
+    achievement
+  ) {
+
+    const percent =
+      Math.min(
+        100,
+        (
+          achievement.current /
+          achievement.target
+        ) * 100
+      );
+
+
+    return `
+
+      <div
+        class="achievement-card
+        ${achievement.unlocked ? "unlocked" : "locked"}"
+      >
+
+        <div class="achievement-icon">
+          ${achievement.unlocked
+            ? achievement.icon
+            : "🔒"}
+        </div>
+
+
+        <div class="achievement-info">
+
+          <div class="achievement-name">
+            ${escapeHtml(
+              achievement.name
+            )}
+          </div>
+
+
+          <div class="achievement-desc">
+            ${escapeHtml(
+              achievement.description
+            )}
+          </div>
+
+
+          ${
+            achievement.unlocked
+
+              ? `
+                <div class="unlocked-badge">
+                  ✓ 已解锁
+                </div>
+              `
+
+              : `
+                <div class="achievement-progress-row">
+
+                  <div class="achievement-mini-progress">
+
+                    <div
+                      class="achievement-mini-bar"
+                      style="width:${percent}%"
+                    ></div>
+
+                  </div>
+
+
+                  <div class="achievement-progress-text">
+                    ${escapeHtml(
+                      formatNumber(
+                        achievement.current
+                      )
+                    )}
+                    /
+                    ${escapeHtml(
+                      formatNumber(
+                        achievement.target
+                      )
+                    )}
+                  </div>
+
+                </div>
+              `
+          }
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  function renderAchievements() {
+
+    const groups =
+      getGlobalAchievementGroups();
+
+
+    const all =
+      groups.flatMap(
+        group =>
+          group.achievements
+      );
+
+
+    const unlockedCount =
+      all.filter(
+        item =>
+          item.unlocked
+      ).length;
+
+
+    const percent =
+      all.length === 0
+        ? 0
+        : (
+            unlockedCount /
+            all.length
+          ) * 100;
+
+
+    document
+      .getElementById(
+        "achievementSummary"
+      )
+      .innerHTML = `
+
+        <div class="achievement-summary-top">
+
+          <div>
+
+            <div class="achievement-summary-label">
+              全局成就
+            </div>
+
+            <div class="achievement-summary-number">
+              ${unlockedCount} / ${all.length}
+            </div>
+
+          </div>
+
+
+          <div class="achievement-summary-percent">
+            ${Math.round(percent)}%
+          </div>
+
+        </div>
+
+
+        <div class="progress">
+
+          <div
+            class="progress-bar"
+            style="width:${percent}%"
+          ></div>
+
+        </div>
+
+      `;
+
+
+    const list =
+      document.getElementById(
+        "achievementList"
+      );
+
+
+    list.innerHTML =
+      "";
+
+
+    groups.forEach(
+      group => {
+
+        const element =
+          document.createElement(
+            "div"
+          );
+
+
+        element.className =
+          "achievement-group";
+
+
+        element.innerHTML = `
+
+          <div class="achievement-group-title">
+            ${group.icon}
+            ${escapeHtml(group.title)}
+          </div>
+
+          <div style="font-size:12px;color:#999;margin:-5px 0 12px 0;">
+            ${escapeHtml(group.subtitle)}
+          </div>
+
+          ${group.achievements.map(
+            renderAchievementCard
+          ).join("")}
+
+        `;
+
+
+        list.appendChild(
+          element
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =========================================
+     统计
+  ========================================= */
+
+  function startOfDay(
+    date
+  ) {
+
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
+  }
+
+
+  function addDays(
+    date,
+    days
+  ) {
+
+    const result =
+      new Date(date);
+
+
+    result.setDate(
+      result.getDate() + days
+    );
+
+
+    return result;
+
+  }
+
+
+  function getStatsRange() {
+
+    const now =
+      startOfDay(
+        new Date()
+      );
+
+
+    let start;
+    let end;
+    let label;
+
+
+    if (
+      statsPeriod === "week"
+    ) {
+
+      const mondayOffset =
+        (now.getDay() + 6) % 7;
+
+
+      start =
+        addDays(
+          now,
+          -mondayOffset
+        );
+
+
+      end =
+        addDays(
+          start,
+          7
+        );
+
+
+      label =
+        "本周";
+
+    } else if (
+      statsPeriod === "month"
+    ) {
+
+      start =
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          1
+        );
+
+
+      end =
+        new Date(
+          now.getFullYear(),
+          now.getMonth() + 1,
+          1
+        );
+
+
+      label =
+        `${now.getMonth() + 1} 月`;
+
+    } else {
+
+      start =
+        new Date(
+          now.getFullYear(),
+          0,
+          1
+        );
+
+
+      end =
+        new Date(
+          now.getFullYear() + 1,
+          0,
+          1
+        );
+
+
+      label =
+        `${now.getFullYear()} 年`;
+
+    }
+
+
+    return {
+      start,
+      end,
+      label
+    };
+
+  }
+
+
+  function getRecordsInRange(
+    start,
+    end
+  ) {
+
+    const startKey =
+      getDateKey(start);
+
+
+    const endKey =
+      getDateKey(end);
+
+
+    return data.history.filter(
+      record =>
+        record.date >= startKey &&
+        record.date < endKey
+    );
+
+  }
+
+
+  function setStatsPeriod(
+    period
+  ) {
+
+    statsPeriod =
+      period;
+
+
+    [
+      "week",
+      "month",
+      "year"
+    ].forEach(
+      item => {
+
+        document
+          .getElementById(
+            `${item}Tab`
+          )
+          .classList.toggle(
+            "active",
+            item === period
+          );
+
+      }
+    );
+
+
+    renderStats();
+
+  }
+
+
+  function getTrendBuckets(
+    range,
+    records
+  ) {
+
+    const buckets =
+      [];
+
+
+    if (
+      statsPeriod === "week"
+    ) {
+
+      const labels = [
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六",
+        "日"
+      ];
+
+
+      for (
+        let i = 0;
+        i < 7;
+        i++
+      ) {
+
+        const date =
+          addDays(
+            range.start,
+            i
+          );
+
+
+        const key =
+          getDateKey(date);
+
+
+        const xp =
+          records
+            .filter(
+              record =>
+                record.date === key
+            )
+            .reduce(
+              (sum, record) =>
+                sum +
+                Number(record.xp || 0),
+              0
+            );
+
+
+        buckets.push({
+          label: labels[i],
+          xp,
+          fullLabel:
+            `${date.getMonth() + 1}/${date.getDate()}`
+        });
+
+      }
+
+
+      return buckets;
+
+    }
+
+
+    if (
+      statsPeriod === "month"
+    ) {
+
+      const daysInMonth =
+        new Date(
+          range.start.getFullYear(),
+          range.start.getMonth() + 1,
+          0
+        ).getDate();
+
+
+      for (
+        let day = 1;
+        day <= daysInMonth;
+        day++
+      ) {
+
+        const date =
+          new Date(
+            range.start.getFullYear(),
+            range.start.getMonth(),
+            day
+          );
+
+
+        const key =
+          getDateKey(date);
+
+
+        const xp =
+          records
+            .filter(
+              record =>
+                record.date === key
+            )
+            .reduce(
+              (sum, record) =>
+                sum +
+                Number(record.xp || 0),
+              0
+            );
+
+
+        buckets.push({
+          label:
+            day === 1 ||
+            day % 5 === 0
+              ? String(day)
+              : "",
+          xp,
+          fullLabel:
+            `${range.start.getMonth() + 1}/${day}`
+        });
+
+      }
+
+
+      return buckets;
+
+    }
+
+
+    for (
+      let month = 0;
+      month < 12;
+      month++
+    ) {
+
+      const monthStart =
+        new Date(
+          range.start.getFullYear(),
+          month,
+          1
+        );
+
+
+      const monthEnd =
+        new Date(
+          range.start.getFullYear(),
+          month + 1,
+          1
+        );
+
+
+      const startKey =
+        getDateKey(monthStart);
+
+
+      const endKey =
+        getDateKey(monthEnd);
+
+
+      const xp =
+        records
+          .filter(
+            record =>
+              record.date >= startKey &&
+              record.date < endKey
+          )
+          .reduce(
+            (sum, record) =>
+              sum +
+              Number(record.xp || 0),
+            0
+          );
+
+
+      buckets.push({
+        label:
+          `${month + 1}月`,
+        xp,
+        fullLabel:
+          `${month + 1} 月`
+      });
+
+    }
+
+
+    return buckets;
+
+  }
+
+
+  function renderTrend(
+    range,
+    records
+  ) {
+
+    const buckets =
+      getTrendBuckets(
+        range,
+        records
+      );
+
+
+    const maxXp =
+      Math.max(
+        1,
+        ...buckets.map(
+          bucket =>
+            bucket.xp
+        )
+      );
+
+
+    const chart =
+      document.getElementById(
+        "trendChart"
+      );
+
+
+    chart.innerHTML =
+      buckets.map(
+        bucket => {
+
+          const height =
+            bucket.xp <= 0
+              ? 2
+              : Math.max(
+                  6,
+                  (
+                    bucket.xp /
+                    maxXp
+                  ) * 100
+                );
+
+
+          const showValue =
+            bucket.xp > 0 &&
+            (
+              statsPeriod !== "month" ||
+              bucket.xp === maxXp
+            );
+
+
+          return `
+            <div
+              class="trend-column"
+              title="${escapeHtml(bucket.fullLabel)} · ${formatNumber(bucket.xp)} XP"
+            >
+              <div class="trend-value">
+                ${showValue
+                  ? formatNumber(bucket.xp)
+                  : ""}
+              </div>
+
+              <div class="trend-bar-wrap">
+                <div
+                  class="trend-bar"
+                  style="height:${height}%"
+                ></div>
+              </div>
+
+              <div class="trend-label">
+                ${escapeHtml(bucket.label)}
+              </div>
+            </div>
+          `;
+
+        }
+      ).join("");
+
+
+    document
+      .getElementById(
+        "trendSubtitle"
+      )
+      .innerText =
+      statsPeriod === "year"
+        ? "按月查看获得的 XP"
+        : "按天查看获得的 XP";
+
+
+    const best =
+      buckets.reduce(
+        (best, bucket) =>
+          bucket.xp > best.xp
+            ? bucket
+            : best,
+        {
+          xp: 0,
+          fullLabel: ""
+        }
+      );
+
+
+    document
+      .getElementById(
+        "trendNote"
+      )
+      .innerText =
+      best.xp > 0
+        ? `最高：${best.fullLabel} · ${formatNumber(best.xp)} XP`
+        : "这段时间还没有 XP 记录";
+
+  }
+
+
+  function renderTaskStats(
+    records
+  ) {
+
+    const container =
+      document.getElementById(
+        "taskStats"
+      );
+
+
+    if (
+      records.length === 0
+    ) {
+
+      container.innerHTML = `
+        <div class="stats-empty-small">
+          这段时间还没有任务记录。
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    const grouped = {};
+
+
+    records.forEach(
+      record => {
+
+        if (
+          !grouped[record.taskId]
+        ) {
+
+          grouped[record.taskId] = [];
+
+        }
+
+
+        grouped[record.taskId].push(
+          record
+        );
+
+      }
+    );
+
+
+    const rows =
+      Object.entries(grouped)
+        .map(
+          ([taskId, taskRecords]) => {
+
+            const task =
+              data.tasks.find(
+                item =>
+                  item.id === taskId
+              );
+
+
+            const name =
+              task
+                ? task.name
+                : "已删除的任务";
+
+
+            const emoji =
+              task
+                ? task.emoji
+                : "⭐";
+
+
+            const xp =
+              taskRecords.reduce(
+                (sum, record) =>
+                  sum +
+                  Number(record.xp || 0),
+                0
+              );
+
+
+            const amountRecords =
+              taskRecords.filter(
+                record =>
+                  record.isAmountRecord === true &&
+                  Number(record.amount || 0) > 0
+              );
+
+
+            let detail;
+
+
+            if (
+              amountRecords.length > 0
+            ) {
+
+              const byUnit = {};
+
+
+              amountRecords.forEach(
+                record => {
+
+                  const unit =
+                    record.unit || "单位";
+
+
+                  byUnit[unit] =
+                    (byUnit[unit] || 0) +
+                    Number(record.amount || 0);
+
+                }
+              );
+
+
+              const amountText =
+                Object.entries(byUnit)
+                  .map(
+                    ([unit, amount]) =>
+                      formatAmount(
+                        amount,
+                        unit
+                      )
+                  )
+                  .join(" + ");
+
+
+              detail =
+                `${amountText} · ${taskRecords.length} 次记录`;
+
+            } else {
+
+              detail =
+                `${taskRecords.length} 次完成`;
+
+            }
+
+
+            return {
+              name,
+              emoji,
+              xp,
+              detail,
+              count:
+                taskRecords.length
+            };
+
+          }
+        )
+        .sort(
+          (a, b) =>
+            b.xp - a.xp ||
+            b.count - a.count
+        );
+
+
+    container.innerHTML =
+      rows.map(
+        row => `
+          <div class="task-stat-row">
+
+            <div class="task-stat-top">
+
+              <div class="task-stat-name">
+                ${escapeHtml(row.emoji)}
+                ${escapeHtml(row.name)}
+              </div>
+
+              <div class="task-stat-xp">
+                +${formatNumber(row.xp)} XP
+              </div>
+
+            </div>
+
+            <div class="task-stat-detail">
+              ${escapeHtml(row.detail)}
+            </div>
+
+          </div>
+        `
+      ).join("");
+
+  }
+
+
+  function getEarliestHistoryYear() {
+
+    const years =
+      data.history
+        .map(
+          record =>
+            Number(
+              String(record.date)
+                .slice(0, 4)
+            )
+        )
+        .filter(
+          year =>
+            Number.isFinite(year)
+        );
+
+
+    return years.length
+      ? Math.min(...years)
+      : new Date().getFullYear();
+
+  }
+
+
+  function changeHeatmapYear(
+    direction
+  ) {
+
+    const currentYear =
+      new Date().getFullYear();
+
+
+    const earliestYear =
+      getEarliestHistoryYear();
+
+
+    heatmapYear =
+      Math.max(
+        earliestYear,
+        Math.min(
+          currentYear,
+          heatmapYear + direction
+        )
+      );
+
+
+    renderHeatmap();
+
+  }
+
+
+  function renderHeatmap() {
+
+    const currentYear =
+      new Date().getFullYear();
+
+
+    const earliestYear =
+      getEarliestHistoryYear();
+
+
+    /*
+      新的一年第一次打开时，
+      自动跟随当前年份。
+      同一次打开期间如果用户手动翻到旧年份，
+      则保留用户正在查看的年份。
+    */
+
+    if (
+      heatmapYear > currentYear
+    ) {
+
+      heatmapYear =
+        currentYear;
+
+    }
+
+
+    if (
+      heatmapYear < earliestYear
+    ) {
+
+      heatmapYear =
+        earliestYear;
+
+    }
+
+
+    document
+      .getElementById(
+        "heatmapYear"
+      )
+      .innerText =
+      `${heatmapYear} 年`;
+
+
+    document
+      .getElementById(
+        "prevHeatmapYear"
+      )
+      .disabled =
+      heatmapYear <= earliestYear;
+
+
+    document
+      .getElementById(
+        "nextHeatmapYear"
+      )
+      .disabled =
+      heatmapYear >= currentYear;
+
+
+    const counts = {};
+
+
+    data.history.forEach(
+      record => {
+
+        if (
+          record.date.startsWith(
+            `${heatmapYear}-`
+          )
+        ) {
+
+          counts[record.date] =
+            (counts[record.date] || 0) + 1;
+
+        }
+
+      }
+    );
+
+
+    const maxCount =
+      Math.max(
+        1,
+        ...Object.values(counts)
+      );
+
+
+    const start =
+      new Date(
+        heatmapYear,
+        0,
+        1
+      );
+
+
+    const end =
+      new Date(
+        heatmapYear + 1,
+        0,
+        1
+      );
+
+
+    const mondayOffset =
+      (start.getDay() + 6) % 7;
+
+
+    const gridStart =
+      addDays(
+        start,
+        -mondayOffset
+      );
+
+
+    let html =
+      "";
+
+
+    for (
+      let date = new Date(gridStart);
+      date < end;
+      date = addDays(date, 1)
+    ) {
+
+      const key =
+        getDateKey(date);
+
+
+      const isTargetYear =
+        date.getFullYear() ===
+        heatmapYear;
+
+
+      const count =
+        isTargetYear
+          ? (counts[key] || 0)
+          : 0;
+
+
+      let level =
+        0;
+
+
+      if (
+        count > 0
+      ) {
+
+        const ratio =
+          count / maxCount;
+
+
+        if (
+          ratio <= .25
+        ) {
+          level = 1;
+        } else if (
+          ratio <= .5
+        ) {
+          level = 2;
+        } else if (
+          ratio <= .75
+        ) {
+          level = 3;
+        } else {
+          level = 4;
+        }
+
+      }
+
+
+      html += `
+        <div
+          class="heat-cell ${level ? `level-${level}` : ""}"
+          title="${key} · ${count} 次行动"
+          style="${isTargetYear ? "" : "visibility:hidden;"}"
+        ></div>
+      `;
+
+    }
+
+
+    document
+      .getElementById(
+        "heatmap"
+      )
+      .innerHTML =
+      html;
+
+  }
+
+
+  function renderStats() {
+
+    const range =
+      getStatsRange();
+
+
+    const records =
+      getRecordsInRange(
+        range.start,
+        range.end
+      );
+
+
+    const totalXp =
+      records.reduce(
+        (sum, record) =>
+          sum +
+          Number(record.xp || 0),
+        0
+      );
+
+
+    const activeDays =
+      new Set(
+        records.map(
+          record =>
+            record.date
+        )
+      ).size;
+
+
+    document
+      .getElementById(
+        "statsSummary"
+      )
+      .innerHTML = `
+
+        <div class="stats-period-label">
+          ${escapeHtml(range.label)}
+        </div>
+
+        <div class="stats-main-xp">
+          ${formatNumber(totalXp)}
+          <span>XP</span>
+        </div>
+
+        <div class="stats-mini-grid">
+
+          <div class="stats-mini">
+            <div class="stats-mini-number">
+              ${records.length}
+            </div>
+            <div class="stats-mini-label">
+              行动次数
+            </div>
+          </div>
+
+          <div class="stats-mini">
+            <div class="stats-mini-number">
+              ${activeDays}
+            </div>
+            <div class="stats-mini-label">
+              活跃天数
+            </div>
+          </div>
+
+          <div class="stats-mini">
+            <div class="stats-mini-number">
+              ${calculateStreak()}
+            </div>
+            <div class="stats-mini-label">
+              当前连续
+            </div>
+          </div>
+
+        </div>
+
+      `;
+
+
+    renderTrend(
+      range,
+      records
+    );
+
+
+    renderTaskStats(
+      records
+    );
+
+
+    renderHeatmap();
+
+  }
+
+
+  /* =========================================
+     完成任务
+  ========================================= */
+
+  function startCompletion(
+    taskId
+  ) {
+
+    const task =
+      data.tasks.find(
+        task =>
+          task.id === taskId
+      );
+
+
+    if (!task) {
+      return;
+    }
+
+
+    if (
+      task.scoreMode ===
+      "fixed"
+    ) {
+
+      if (
+        task.oncePerDay &&
+        getTodayRecords(
+          task.id
+        ).length > 0
+      ) {
+
+        showToast(
+          "今天已经完成啦 ✓"
+        );
+
+        return;
+
+      }
+
+
+      recordCompletion(
+        task,
+        null,
+        task.fixedXp,
+        false
+      );
+
+
+      return;
+
+    }
+
+
+    completingTaskId =
+      task.id;
+
+
+    document
+      .getElementById(
+        "completeEmoji"
+      )
+      .innerText =
+      task.emoji;
+
+
+    document
+      .getElementById(
+        "completeName"
+      )
+      .innerText =
+      task.name;
+
+
+    document
+      .getElementById(
+        "completeUnit"
+      )
+      .innerText =
+      task.unit;
+
+
+    document
+      .getElementById(
+        "completeAmount"
+      )
+      .value =
+      "";
+
+
+    updateXpPreview();
+
+
+    document
+      .getElementById(
+        "amountModal"
+      )
+      .classList.add(
+        "show"
+      );
+
+
+    setTimeout(
+      function () {
+
+        document
+          .getElementById(
+            "completeAmount"
+          )
+          .focus();
+
+      },
+      100
+    );
+
+  }
+
+
+  function calculateAmountXp(
+    task,
+    amount
+  ) {
+
+    return (
+      Number(amount) /
+      Number(task.amountBase)
+    )
+    *
+    Number(task.xpPerBase);
+
+  }
+
+
+  function updateXpPreview() {
+
+    const task =
+      data.tasks.find(
+        task =>
+          task.id ===
+          completingTaskId
+      );
+
+
+    if (!task) {
+
+      document
+        .getElementById(
+          "xpPreview"
+        )
+        .innerText =
+        "获得 +0 XP";
+
+      return;
+
+    }
+
+
+    const amount =
+      Number(
+        document
+          .getElementById(
+            "completeAmount"
+          )
+          .value
+      );
+
+
+    if (
+      !Number.isFinite(amount) ||
+      amount <= 0
+    ) {
+
+      document
+        .getElementById(
+          "xpPreview"
+        )
+        .innerText =
+        "获得 +0 XP";
+
+      return;
+
+    }
+
+
+    const xp =
+      calculateAmountXp(
+        task,
+        amount
+      );
+
+
+    document
+      .getElementById(
+        "xpPreview"
+      )
+      .innerText =
+      `获得 +${formatNumber(xp)} XP`;
+
+  }
+
+
+  function confirmAmountCompletion() {
+
+    const task =
+      data.tasks.find(
+        task =>
+          task.id ===
+          completingTaskId
+      );
+
+
+    if (!task) {
+
+      closeAmountModal();
+
+      return;
+
+    }
+
+
+    const amount =
+      Number(
+        document
+          .getElementById(
+            "completeAmount"
+          )
+          .value
+      );
+
+
+    if (
+      !Number.isFinite(amount) ||
+      amount <= 0
+    ) {
+
+      alert(
+        "请输入大于 0 的完成量。"
+      );
+
+      return;
+
+    }
+
+
+    const xp =
+      calculateAmountXp(
+        task,
+        amount
+      );
+
+
+    closeAmountModal();
+
+
+    recordCompletion(
+      task,
+      amount,
+      xp,
+      true
+    );
+
+  }
+
+
+  function closeAmountModal() {
+
+    document
+      .getElementById(
+        "amountModal"
+      )
+      .classList.remove(
+        "show"
+      );
+
+
+    completingTaskId =
+      null;
+
+  }
+
+
+  function recordCompletion(
+    task,
+    amount,
+    xp,
+    isAmountRecord
+  ) {
+
+    if (
+      task.scoreMode === "fixed" &&
+      task.oncePerDay &&
+      getTodayRecords(task.id).length > 0
+    ) {
+
+      showToast(
+        "今天已经完成啦 ✓"
+      );
+
+      return;
+
+    }
+
+
+    const recordId =
+      makeId();
+
+
+    data.history.push({
+
+      id:
+        recordId,
+
+      taskId:
+        task.id,
+
+      date:
+        getDateKey(),
+
+      timestamp:
+        new Date().toISOString(),
+
+      xp:
+        Number(xp),
+
+      amount:
+        amount,
+
+      unit:
+        isAmountRecord
+          ? task.unit
+          : "",
+
+      scoreMode:
+        task.scoreMode,
+
+      isAmountRecord:
+        isAmountRecord
+
+    });
+
+
+    saveData();
+
+    render();
+
+
+    let message =
+      `${task.emoji} `;
+
+
+    if (
+      isAmountRecord
+    ) {
+
+      message +=
+        `${formatAmount(
+          amount,
+          task.unit
+        )} · `;
+
+    }
+
+
+    message +=
+      `+${formatNumber(xp)} XP · 点击撤销`;
+
+
+    showToast(
+      message,
+
+      function () {
+
+        undoRecord(
+          recordId
+        );
+
+      }
+    );
+
+
+    /*
+      稍等一下再检查成就，
+      避免和 +XP 的动画/提示同时出现。
+    */
+
+    setTimeout(
+      checkNewAchievements,
+      450
+    );
+
+  }
+
+
+  /* =========================================
+     撤销
+  ========================================= */
+
+  function undoRecord(
+    recordId
+  ) {
+
+    const index =
+      data.history.findIndex(
+        record =>
+          record.id === recordId
+      );
+
+
+    if (
+      index === -1
+    ) {
+
+      showToast(
+        "这条记录已经不存在了"
+      );
+
+      return;
+
+    }
+
+
+    data.history.splice(
+      index,
+      1
+    );
+
+
+    saveData();
+
+    render();
+
+
+    showToast(
+      "↩️ 已撤销"
+    );
+
+  }
+
+
+  /* =========================================
+     今日全部撤销
+  ========================================= */
+
+  function getAllTodayRecords() {
+
+    const today =
+      getDateKey();
+
+
+    return data.history.filter(
+      record =>
+        record.date === today
+    );
+
+  }
+
+
+  function openClearTodayModal() {
+
+    const records =
+      getAllTodayRecords();
+
+
+    if (
+      records.length === 0
+    ) {
+
+      showToast(
+        "今天还没有任何记录"
+      );
+
+      return;
+
+    }
+
+
+    const totalXp =
+      records.reduce(
+        (total, record) =>
+          total +
+          Number(record.xp || 0),
+        0
+      );
+
+
+    document
+      .getElementById(
+        "clearTodaySummary"
+      )
+      .innerHTML =
+      `今天共有 <b>${records.length}</b> 条记录，`
+      +
+      `全部撤销后将扣除 <b>${formatNumber(totalXp)} XP</b>。`;
+
+
+    const list =
+      document.getElementById(
+        "todayRecordList"
+      );
+
+
+    list.innerHTML =
+      "";
+
+
+    records.forEach(
+      record => {
+
+        const task =
+          data.tasks.find(
+            task =>
+              task.id === record.taskId
+          );
+
+
+        const emoji =
+          task
+            ? task.emoji
+            : "⭐";
+
+
+        const name =
+          task
+            ? task.name
+            : "已删除的任务";
+
+
+        let detail =
+          `${escapeHtml(emoji)} ${escapeHtml(name)}`;
+
+
+        if (
+          record.isAmountRecord === true &&
+          record.amount !== null
+        ) {
+
+          detail +=
+            ` · ${escapeHtml(
+              formatAmount(
+                record.amount,
+                record.unit
+              )
+            )}`;
+
+        }
+
+
+        detail +=
+          ` · +${formatNumber(record.xp)} XP`;
+
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+
+        div.className =
+          "today-record";
+
+
+        div.innerHTML =
+          detail;
+
+
+        list.appendChild(
+          div
+        );
+
+      }
+    );
+
+
+    document
+      .getElementById(
+        "clearTodayModal"
+      )
+      .classList.add(
+        "show"
+      );
+
+  }
+
+
+  function closeClearTodayModal() {
+
+    document
+      .getElementById(
+        "clearTodayModal"
+      )
+      .classList.remove(
+        "show"
+      );
+
+  }
+
+
+  function clearTodayRecords() {
+
+    const today =
+      getDateKey();
+
+
+    const records =
+      getAllTodayRecords();
+
+
+    if (
+      records.length === 0
+    ) {
+
+      closeClearTodayModal();
+
+      return;
+
+    }
+
+
+    const removedXp =
+      records.reduce(
+        (total, record) =>
+          total +
+          Number(record.xp || 0),
+        0
+      );
+
+
+    data.history =
+      data.history.filter(
+        record =>
+          record.date !== today
+      );
+
+
+    saveData();
+
+
+    closeClearTodayModal();
+
+
+    render();
+
+
+    showToast(
+      `↩️ 已撤销今天全部记录 · -${formatNumber(removedXp)} XP`
+    );
+
+  }
+
+
+  /* =========================================
+     XP / 等级
+  ========================================= */
+
+  function getTotalXp() {
+
+    return data.history.reduce(
+      (total, record) =>
+        total +
+        Number(record.xp || 0),
+      0
+    );
+
+  }
+
+
+  function calculateLevel(
+    totalXp
+  ) {
+
+    let level =
+      1;
+
+
+    let remaining =
+      totalXp;
+
+
+    let needed =
+      100;
+
+
+    while (
+      remaining >= needed
+    ) {
+
+      remaining -=
+        needed;
+
+
+      level++;
+
+
+      needed =
+        100 +
+        (level - 1) * 50;
+
+    }
+
+
+    return {
+
+      level:
+        level,
+
+      currentXp:
+        remaining,
+
+      neededXp:
+        needed
+
+    };
+
+  }
+
+
+  function renderLevel() {
+
+    const totalXp =
+      getTotalXp();
+
+
+    const result =
+      calculateLevel(
+        totalXp
+      );
+
+
+    document
+      .getElementById(
+        "level"
+      )
+      .innerText =
+      `Lv. ${result.level}`;
+
+
+    document
+      .getElementById(
+        "xpDisplay"
+      )
+      .innerText =
+      `${formatNumber(result.currentXp)} / ${formatNumber(result.neededXp)} XP`;
+
+
+    document
+      .getElementById(
+        "totalXp"
+      )
+      .innerText =
+      `累计获得 ${formatNumber(totalXp)} XP`;
+
+
+    const percent =
+      Math.min(
+        100,
+        (
+          result.currentXp /
+          result.neededXp
+        ) * 100
+      );
+
+
+    document
+      .getElementById(
+        "progressBar"
+      )
+      .style.width =
+      percent + "%";
+
+  }
+
+
+  /* =========================================
+     连续坚持
+  ========================================= */
+
+  function calculateStreak() {
+
+    if (
+      data.history.length === 0
+    ) {
+
+      return 0;
+
+    }
+
+
+    const dates =
+      new Set(
+        data.history.map(
+          record =>
+            record.date
+        )
+      );
+
+
+    let cursor =
+      new Date();
+
+
+    let streak =
+      0;
+
+
+    if (
+      !dates.has(
+        getDateKey(cursor)
+      )
+    ) {
+
+      cursor.setDate(
+        cursor.getDate() - 1
+      );
+
+    }
+
+
+    while (
+      dates.has(
+        getDateKey(cursor)
+      )
+    ) {
+
+      streak++;
+
+
+      cursor.setDate(
+        cursor.getDate() - 1
+      );
+
+    }
+
+
+    return streak;
+
+  }
+
+
+  function renderStreak() {
+
+    document
+      .getElementById(
+        "streak"
+      )
+      .innerText =
+      `🔥 连续坚持 ${calculateStreak()} 天`;
+
+  }
+
+
+  /* =========================================
+     创建任务
+  ========================================= */
+
+  function openAddModal() {
+
+    editingTaskId =
+      null;
+
+
+    document
+      .getElementById(
+        "modalTitle"
+      )
+      .innerText =
+      "创建任务";
+
+
+    document
+      .getElementById(
+        "taskName"
+      )
+      .value =
+      "";
+
+
+    document
+      .getElementById(
+        "taskEmoji"
+      )
+      .value =
+      "⭐";
+document
+      .getElementById(
+        "modeFixed"
+      )
+      .checked =
+      true;
+
+
+    document
+      .getElementById(
+        "fixedXp"
+      )
+      .value =
+      5;
+
+
+    document
+      .getElementById(
+        "oncePerDay"
+      )
+      .checked =
+      false;
+
+
+    document
+      .getElementById(
+        "amountUnit"
+      )
+      .value =
+      "分钟";
+
+
+    document
+      .getElementById(
+        "customUnit"
+      )
+      .value =
+      "";
+
+
+    document
+      .getElementById(
+        "amountBase"
+      )
+      .value =
+      1;
+
+
+    document
+      .getElementById(
+        "xpPerBase"
+      )
+      .value =
+      1;
+
+
+    document
+      .getElementById(
+        "undoTaskButton"
+      )
+      .style.display =
+      "none";
+
+
+    document
+      .getElementById(
+        "deleteButton"
+      )
+      .style.display =
+      "none";
+
+
+    updateScoreMode();
+
+    updateCustomUnit();
+
+
+    document
+      .getElementById(
+        "taskModal"
+      )
+      .classList.add(
+        "show"
+      );
+
+  }
+
+
+  /* =========================================
+     编辑任务
+  ========================================= */
+
+  function openEditModal(
+    id
+  ) {
+
+    const task =
+      data.tasks.find(
+        task =>
+          task.id === id
+      );
+
+
+    if (!task) {
+      return;
+    }
+
+
+    editingTaskId =
+      id;
+
+
+    document
+      .getElementById(
+        "modalTitle"
+      )
+      .innerText =
+      "编辑任务";
+
+
+    document
+      .getElementById(
+        "taskName"
+      )
+      .value =
+      task.name;
+
+
+    document
+      .getElementById(
+        "taskEmoji"
+      )
+      .value =
+      task.emoji;
+document
+      .getElementById(
+        task.scoreMode === "amount"
+          ? "modeAmount"
+          : "modeFixed"
+      )
+      .checked =
+      true;
+
+
+    document
+      .getElementById(
+        "fixedXp"
+      )
+      .value =
+      task.fixedXp || 5;
+
+
+    document
+      .getElementById(
+        "oncePerDay"
+      )
+      .checked =
+      task.oncePerDay;
+
+
+    setUnitFields(
+      task.unit
+    );
+
+
+    document
+      .getElementById(
+        "amountBase"
+      )
+      .value =
+      task.amountBase || 1;
+
+
+    document
+      .getElementById(
+        "xpPerBase"
+      )
+      .value =
+      task.xpPerBase || 1;
+
+
+    document
+      .getElementById(
+        "undoTaskButton"
+      )
+      .style.display =
+      "block";
+
+
+    document
+      .getElementById(
+        "deleteButton"
+      )
+      .style.display =
+      "block";
+
+
+    updateScoreMode();
+
+    updateCustomUnit();
+
+
+    document
+      .getElementById(
+        "taskModal"
+      )
+      .classList.add(
+        "show"
+      );
+
+  }
+
+
+  function closeTaskModal() {
+
+    document
+      .getElementById(
+        "taskModal"
+      )
+      .classList.remove(
+        "show"
+      );
+
+
+    editingTaskId =
+      null;
+
+  }
+
+
+  function updateScoreMode() {
+
+    const amountMode =
+      document
+        .getElementById(
+          "modeAmount"
+        )
+        .checked;
+
+
+    document
+      .getElementById(
+        "fixedSettings"
+      )
+      .classList.toggle(
+        "hidden",
+        amountMode
+      );
+
+
+    document
+      .getElementById(
+        "amountSettings"
+      )
+      .classList.toggle(
+        "hidden",
+        !amountMode
+      );
+
+  }
+
+
+  function updateCustomUnit() {
+
+    const select =
+      document.getElementById(
+        "amountUnit"
+      );
+
+
+    const custom =
+      document.getElementById(
+        "customUnit"
+      );
+
+
+    custom.classList.toggle(
+      "show",
+      select.value === "custom"
+    );
+
+
+    const unit =
+      select.value === "custom"
+        ? custom.value.trim() || "单位"
+        : select.value;
+
+
+    document
+      .getElementById(
+        "unitPreview"
+      )
+      .innerText =
+      unit;
+
+  }
+
+
+  function setUnitFields(
+    unit
+  ) {
+
+    const predefined = [
+      "分钟",
+      "小时",
+      "页",
+      "件",
+      "个",
+      "ml",
+      "miles",
+      "$"
+    ];
+
+
+    if (
+      predefined.includes(
+        unit
+      )
+    ) {
+
+      document
+        .getElementById(
+          "amountUnit"
+        )
+        .value =
+        unit;
+
+
+      document
+        .getElementById(
+          "customUnit"
+        )
+        .value =
+        "";
+
+    } else {
+
+      document
+        .getElementById(
+          "amountUnit"
+        )
+        .value =
+        "custom";
+
+
+      document
+        .getElementById(
+          "customUnit"
+        )
+        .value =
+        unit || "";
+
+    }
+
+  }
+
+
+  function getSelectedUnit() {
+
+    const selected =
+      document
+        .getElementById(
+          "amountUnit"
+        )
+        .value;
+
+
+    if (
+      selected === "custom"
+    ) {
+
+      return document
+        .getElementById(
+          "customUnit"
+        )
+        .value
+        .trim();
+
+    }
+
+
+    return selected;
+
+  }
+
+
+  function saveTask() {
+
+    const name =
+      document
+        .getElementById(
+          "taskName"
+        )
+        .value
+        .trim();
+
+
+    const emoji =
+      document
+        .getElementById(
+          "taskEmoji"
+        )
+        .value
+        .trim() || "⭐";
+
+
+    const scoreMode =
+      document
+        .getElementById(
+          "modeAmount"
+        )
+        .checked
+        ? "amount"
+        : "fixed";
+if (!name) {
+
+      alert(
+        "请输入任务名称。"
+      );
+
+      return;
+
+    }
+
+
+    let taskData;
+
+
+    if (
+      scoreMode ===
+      "fixed"
+    ) {
+
+      const fixedXp =
+        Number(
+          document
+            .getElementById(
+              "fixedXp"
+            )
+            .value
+        );
+
+
+      if (
+        !Number.isFinite(fixedXp) ||
+        fixedXp <= 0
+      ) {
+
+        alert(
+          "请输入正确的 XP。"
+        );
+
+        return;
+
+      }
+
+
+      taskData = {
+
+        name,
+        emoji,
+
+        scoreMode:
+          "fixed",
+
+        fixedXp,
+
+        oncePerDay:
+          document
+            .getElementById(
+              "oncePerDay"
+            )
+            .checked,
+        unit: "",
+        amountBase: 1,
+        xpPerBase: 1
+
+      };
+
+    } else {
+
+      const unit =
+        getSelectedUnit();
+
+
+      const amountBase =
+        Number(
+          document
+            .getElementById(
+              "amountBase"
+            )
+            .value
+        );
+
+
+      const xpPerBase =
+        Number(
+          document
+            .getElementById(
+              "xpPerBase"
+            )
+            .value
+        );
+
+
+      if (!unit) {
+
+        alert(
+          "请输入单位。"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !Number.isFinite(amountBase) ||
+        amountBase <= 0
+      ) {
+
+        alert(
+          "完成量必须大于 0。"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !Number.isFinite(xpPerBase) ||
+        xpPerBase <= 0
+      ) {
+
+        alert(
+          "XP 必须大于 0。"
+        );
+
+        return;
+
+      }
+
+
+      taskData = {
+
+        name,
+        emoji,
+
+        scoreMode:
+          "amount",
+        unit,
+        amountBase,
+        xpPerBase,
+
+        fixedXp: 5,
+        oncePerDay: false
+
+      };
+
+    }
+
+
+    if (
+      editingTaskId
+    ) {
+
+      const task =
+        data.tasks.find(
+          task =>
+            task.id ===
+            editingTaskId
+        );
+
+
+      if (task) {
+
+        Object.assign(
+          task,
+          taskData
+        );
+
+      }
+
+    } else {
+
+      data.tasks.push({
+
+        id:
+          makeId(),
+
+        ...taskData
+
+      });
+
+    }
+
+
+    saveData();
+
+    closeTaskModal();
+
+    render();
+
+  }
+
+
+  /* =========================================
+     撤销最近一次
+  ========================================= */
+
+  function undoRecentTask() {
+
+    if (!editingTaskId) {
+      return;
+    }
+
+
+    const task =
+      data.tasks.find(
+        task =>
+          task.id ===
+          editingTaskId
+      );
+
+
+    if (!task) {
+      return;
+    }
+
+
+    let lastIndex =
+      -1;
+
+
+    let newestTime =
+      -Infinity;
+
+
+    data.history.forEach(
+      (record, index) => {
+
+        if (
+          record.taskId !==
+          editingTaskId
+        ) {
+          return;
+        }
+
+
+        const time =
+          new Date(
+            record.timestamp
+          ).getTime();
+
+
+        if (
+          time > newestTime
+        ) {
+
+          newestTime =
+            time;
+
+          lastIndex =
+            index;
+
+        }
+
+      }
+    );
+
+
+    if (
+      lastIndex === -1
+    ) {
+
+      alert(
+        "这个任务还没有完成记录。"
+      );
+
+      return;
+
+    }
+
+
+    const record =
+      data.history[
+        lastIndex
+      ];
+
+
+    let text =
+      `日期：${record.date}\n`;
+
+
+    if (
+      record.isAmountRecord === true &&
+      record.amount !== null
+    ) {
+
+      text +=
+        `完成量：${formatAmount(
+          record.amount,
+          record.unit || task.unit
+        )}\n`;
+
+    }
+
+
+    text +=
+      `XP：${formatNumber(record.xp)}`;
+
+
+    const confirmed =
+      confirm(
+        `确定撤销「${task.name}」最近的一次记录吗？\n\n${text}`
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    data.history.splice(
+      lastIndex,
+      1
+    );
+
+
+    saveData();
+
+    closeTaskModal();
+
+    render();
+
+
+    showToast(
+      "↩️ 已撤销最近一次完成"
+    );
+
+  }
+
+
+  /* =========================================
+     删除任务
+  ========================================= */
+
+  function deleteTask() {
+
+    if (!editingTaskId) {
+      return;
+    }
+
+
+    const task =
+      data.tasks.find(
+        task =>
+          task.id ===
+          editingTaskId
+      );
+
+
+    if (!task) {
+      return;
+    }
+
+
+    const confirmed =
+      confirm(
+        `确定删除「${task.name}」吗？\n\n以前的完成记录会继续保留。`
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    data.tasks =
+      data.tasks.filter(
+        task =>
+          task.id !==
+          editingTaskId
+      );
+
+
+    saveData();
+
+    closeTaskModal();
+
+    render();
+
+
+    showToast(
+      "任务已删除"
+    );
+
+  }
+
+
+  /* =========================================
+     Toast
+  ========================================= */
+
+  let toastTimer =
+    null;
+
+
+  let toastAction =
+    null;
+
+
+  function showToast(
+    message,
+    action = null
+  ) {
+
+    const toast =
+      document.getElementById(
+        "toast"
+      );
+
+
+    clearTimeout(
+      toastTimer
+    );
+
+
+    toast.innerText =
+      message;
+
+
+    toastAction =
+      action;
+
+
+    toast.classList.add(
+      "show"
+    );
+
+
+    toast.classList.toggle(
+      "clickable",
+      !!action
+    );
+
+
+    toastTimer =
+      setTimeout(
+        function () {
+
+          toast.classList.remove(
+            "show",
+            "clickable"
+          );
+
+
+          toastAction =
+            null;
+
+        },
+        3500
+      );
+
+  }
+
+
+  document
+    .getElementById(
+      "toast"
+    )
+    .addEventListener(
+      "click",
+      function () {
+
+        if (!toastAction) {
+          return;
+        }
+
+
+        const action =
+          toastAction;
+
+
+        toastAction =
+          null;
+
+
+        clearTimeout(
+          toastTimer
+        );
+
+
+        this.classList.remove(
+          "show",
+          "clickable"
+        );
+
+
+        action();
+
+      }
+    );
+
+
+  /* =========================================
+     事件
+  ========================================= */
+
+  document
+    .getElementById(
+      "completeAmount"
+    )
+    .addEventListener(
+      "input",
+      updateXpPreview
+    );
+
+
+  document
+    .getElementById(
+      "completeAmount"
+    )
+    .addEventListener(
+      "keydown",
+      function (event) {
+
+        if (
+          event.key ===
+          "Enter"
+        ) {
+
+          confirmAmountCompletion();
+
+        }
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "customUnit"
+    )
+    .addEventListener(
+      "input",
+      updateCustomUnit
+    );
+
+
+  document
+    .getElementById(
+      "taskModal"
+    )
+    .addEventListener(
+      "click",
+      function (event) {
+
+        if (
+          event.target ===
+          this
+        ) {
+
+          closeTaskModal();
+
+        }
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "amountModal"
+    )
+    .addEventListener(
+      "click",
+      function (event) {
+
+        if (
+          event.target ===
+          this
+        ) {
+
+          closeAmountModal();
+
+        }
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "clearTodayModal"
+    )
+    .addEventListener(
+      "click",
+      function (event) {
+
+        if (
+          event.target ===
+          this
+        ) {
+
+          closeClearTodayModal();
+
+        }
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "unlockModal"
+    )
+    .addEventListener(
+      "click",
+      function (event) {
+
+        if (
+          event.target ===
+          this
+        ) {
+
+          closeUnlockModal();
+
+        }
+
+      }
+    );
+
+
+  /* =========================================
+     总刷新
+  ========================================= */
+
+  function render() {
+
+    showDate();
+
+    renderTasks();
+
+    renderLevel();
+
+    renderStreak();
+
+
+    if (
+      currentPage ===
+      "achievement"
+    ) {
+
+      renderAchievements();
+
+    }
+
+
+    if (
+      currentPage ===
+      "stats"
+    ) {
+
+      renderStats();
+
+    }
+
+  }
+
+
+  render();
+
+</script>
+
+</body>
+
+</html>
