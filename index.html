@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>+1</title>
 
   <style>
@@ -1065,7 +1065,25 @@
       cursor: pointer;
     }
 
-  </style>
+  
+    /* =========================
+       iPhone PWA Safe Area
+    ========================= */
+
+    body {
+      padding-top: env(safe-area-inset-top);
+    }
+
+    .bottom-nav {
+      padding-bottom: env(safe-area-inset-bottom);
+      height: calc(72px + env(safe-area-inset-bottom));
+    }
+
+    .page {
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+
+</style>
 
   <!-- +1 PWA -->
   <meta name="theme-color" content="#111111">
@@ -6362,7 +6380,7 @@ if (!name) {
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
+    navigator.serviceWorker.register("./sw.js?v=2").catch(() => {});
   });
 }
 </script>
