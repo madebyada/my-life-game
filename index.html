@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>+1</title>
+  <title>My Life Game</title>
 
   <style>
     * {
@@ -376,304 +376,6 @@
       font-size: 11px;
       font-weight: 700;
       white-space: nowrap;
-    }
-
-
-    /* =========================
-       统计页面
-    ========================= */
-
-    .stats-header {
-      margin-bottom: 18px;
-    }
-
-    .stats-header h1 {
-      margin-bottom: 6px;
-    }
-
-    .stats-subtitle {
-      color: #999;
-      font-size: 14px;
-    }
-
-    .period-tabs {
-      display: flex;
-      background: #eceef3;
-      padding: 4px;
-      border-radius: 14px;
-      margin-bottom: 18px;
-    }
-
-    .period-tab {
-      flex: 1;
-      border: none;
-      background: transparent;
-      border-radius: 11px;
-      padding: 9px 6px;
-      color: #888;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .period-tab.active {
-      background: white;
-      color: #222;
-      font-weight: 750;
-      box-shadow: 0 2px 8px rgba(0,0,0,.05);
-    }
-
-    .stats-summary-card {
-      background: #222;
-      color: white;
-      border-radius: 22px;
-      padding: 20px;
-      margin-bottom: 18px;
-    }
-
-    .stats-period-label {
-      font-size: 12px;
-      opacity: .65;
-      margin-bottom: 7px;
-    }
-
-    .stats-main-xp {
-      font-size: 34px;
-      font-weight: 850;
-      margin-bottom: 16px;
-    }
-
-    .stats-main-xp span {
-      font-size: 15px;
-      font-weight: 650;
-      opacity: .7;
-    }
-
-    .stats-mini-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .stats-mini {
-      background: rgba(255,255,255,.09);
-      border-radius: 13px;
-      padding: 10px 8px;
-      text-align: center;
-    }
-
-    .stats-mini-number {
-      font-size: 17px;
-      font-weight: 800;
-    }
-
-    .stats-mini-label {
-      font-size: 10px;
-      opacity: .65;
-      margin-top: 3px;
-    }
-
-    .stats-card {
-      background: white;
-      border-radius: 20px;
-      padding: 17px;
-      margin-bottom: 14px;
-      box-shadow: 0 3px 15px rgba(0,0,0,.04);
-    }
-
-    .stats-card-title {
-      font-size: 16px;
-      font-weight: 750;
-      margin-bottom: 4px;
-    }
-
-    .stats-card-subtitle {
-      color: #999;
-      font-size: 11px;
-      margin-bottom: 16px;
-    }
-
-    .trend-chart {
-      height: 160px;
-      display: flex;
-      align-items: stretch;
-      gap: 5px;
-      border-bottom: 1px solid #eee;
-      padding: 8px 2px 0;
-      overflow: hidden;
-    }
-
-    .trend-column {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      height: 100%;
-    }
-
-    .trend-value {
-      font-size: 9px;
-      color: #999;
-      height: 15px;
-      white-space: nowrap;
-    }
-
-    .trend-bar-wrap {
-      flex: 1;
-      width: 100%;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-    }
-
-    .trend-bar {
-      width: min(18px, 72%);
-      min-height: 2px;
-      background: #222;
-      border-radius: 6px 6px 2px 2px;
-    }
-
-    .trend-label {
-      height: 24px;
-      padding-top: 6px;
-      color: #999;
-      font-size: 9px;
-      white-space: nowrap;
-    }
-
-    .task-stat-row {
-      padding: 12px 0;
-      border-bottom: 1px solid #f0f0f2;
-    }
-
-    .task-stat-row:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .task-stat-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .task-stat-name {
-      min-width: 0;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .task-stat-xp {
-      flex-shrink: 0;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .task-stat-detail {
-      color: #999;
-      font-size: 12px;
-      margin-top: 5px;
-      line-height: 1.5;
-    }
-
-    .stats-empty-small {
-      color: #aaa;
-      text-align: center;
-      font-size: 13px;
-      padding: 20px 4px 10px;
-    }
-
-    .heatmap-year-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin: 12px 0 14px;
-      background: #f6f7f9;
-      border-radius: 14px;
-      padding: 7px;
-    }
-
-    .heatmap-year-btn {
-      width: 38px;
-      height: 34px;
-      border: none;
-      border-radius: 10px;
-      background: white;
-      cursor: pointer;
-      font-size: 18px;
-      color: #333;
-      box-shadow: 0 1px 5px rgba(0,0,0,.04);
-    }
-
-    .heatmap-year-btn:disabled {
-      opacity: .25;
-      cursor: default;
-    }
-
-    .heatmap-year-label {
-      flex: 1;
-      text-align: center;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .heatmap-wrap {
-      overflow-x: auto;
-      padding-bottom: 5px;
-    }
-
-    .heatmap {
-      display: grid;
-      grid-auto-flow: column;
-      grid-template-rows: repeat(7, 11px);
-      grid-auto-columns: 11px;
-      gap: 3px;
-      width: max-content;
-      min-width: 100%;
-    }
-
-    .heat-cell {
-      width: 11px;
-      height: 11px;
-      border-radius: 3px;
-      background: #eceef2;
-    }
-
-    .heat-cell.level-1 { background: #cfd2d9; }
-    .heat-cell.level-2 { background: #9fa4ae; }
-    .heat-cell.level-3 { background: #666d78; }
-    .heat-cell.level-4 { background: #222; }
-
-    .heat-legend {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 4px;
-      margin-top: 10px;
-      color: #aaa;
-      font-size: 10px;
-    }
-
-    .heat-legend-box {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-      background: #eceef2;
-    }
-
-    .heat-legend-box.l1 { background: #cfd2d9; }
-    .heat-legend-box.l2 { background: #9fa4ae; }
-    .heat-legend-box.l3 { background: #666d78; }
-    .heat-legend-box.l4 { background: #222; }
-
-    .period-note {
-      text-align: center;
-      color: #aaa;
-      font-size: 11px;
-      margin-top: 8px;
     }
 
     /* =========================
@@ -1066,16 +768,6 @@
     }
 
   </style>
-
-  <!-- +1 PWA -->
-  <meta name="theme-color" content="#111111">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="+1">
-  <link rel="manifest" href="./manifest.json">
-  <link rel="apple-touch-icon" href="./icon-180.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
-
 </head>
 
 <body>
@@ -1180,7 +872,7 @@
       <h1>🏆 成就</h1>
 
       <div class="achievement-subtitle">
-        记录现实里的成长，解锁属于你的里程碑。
+        你的每一点行动都会留下记录。
       </div>
 
     </div>
@@ -1198,7 +890,7 @@
 
 
   <!-- =========================
-       统计页面
+       统计页面占位
   ========================= -->
 
   <div
@@ -1206,150 +898,10 @@
     id="statsPage"
   >
 
-    <div class="stats-header">
+    <h1>📊 统计</h1>
 
-      <h1>📊 统计</h1>
-
-      <div class="stats-subtitle">
-        看见自己的行动轨迹。
-      </div>
-
-    </div>
-
-
-    <div class="period-tabs">
-
-      <button
-        class="period-tab active"
-        id="weekTab"
-        onclick="setStatsPeriod('week')"
-      >
-        本周
-      </button>
-
-      <button
-        class="period-tab"
-        id="monthTab"
-        onclick="setStatsPeriod('month')"
-      >
-        本月
-      </button>
-
-      <button
-        class="period-tab"
-        id="yearTab"
-        onclick="setStatsPeriod('year')"
-      >
-        本年
-      </button>
-
-    </div>
-
-
-    <div
-      class="stats-summary-card"
-      id="statsSummary"
-    ></div>
-
-
-    <div class="stats-card">
-
-      <div class="stats-card-title">
-        📈 XP 趋势
-      </div>
-
-      <div
-        class="stats-card-subtitle"
-        id="trendSubtitle"
-      ></div>
-
-      <div
-        class="trend-chart"
-        id="trendChart"
-      ></div>
-
-      <div
-        class="period-note"
-        id="trendNote"
-      ></div>
-
-    </div>
-
-
-    <div class="stats-card">
-
-      <div class="stats-card-title">
-        🏆 任务记录
-      </div>
-
-      <div class="stats-card-subtitle">
-        按量任务显示累计完成量；普通任务显示完成次数。
-      </div>
-
-      <div id="taskStats"></div>
-
-    </div>
-
-
-    <div class="stats-card">
-
-      <div class="stats-card-title">
-        📅 年度活跃地图
-      </div>
-
-      <div class="stats-card-subtitle">
-        可以翻回过去的年份查看足迹；每个小格代表一天。
-      </div>
-
-
-      <div class="heatmap-year-nav">
-
-        <button
-          class="heatmap-year-btn"
-          id="prevHeatmapYear"
-          onclick="changeHeatmapYear(-1)"
-          aria-label="上一年"
-        >
-          ‹
-        </button>
-
-        <div
-          class="heatmap-year-label"
-          id="heatmapYear"
-        ></div>
-
-        <button
-          class="heatmap-year-btn"
-          id="nextHeatmapYear"
-          onclick="changeHeatmapYear(1)"
-          aria-label="下一年"
-        >
-          ›
-        </button>
-
-      </div>
-
-
-      <div class="heatmap-wrap">
-
-        <div
-          class="heatmap"
-          id="heatmap"
-        ></div>
-
-      </div>
-
-
-      <div class="heat-legend">
-        少
-        <span class="heat-legend-box"></span>
-        <span class="heat-legend-box l1"></span>
-        <span class="heat-legend-box l2"></span>
-        <span class="heat-legend-box l3"></span>
-        <span class="heat-legend-box l4"></span>
-        多
-      </div>
-
+    <div class="empty">
+      统计页面下一步来做。
     </div>
 
   </div>
@@ -1436,6 +988,8 @@
       >
 
     </div>
+
+
     <div class="setting-card">
 
       <div class="setting-title">
@@ -1884,14 +1438,6 @@
     "today";
 
 
-  let statsPeriod =
-    "week";
-
-
-  let heatmapYear =
-    new Date().getFullYear();
-
-
   function makeId() {
 
     return (
@@ -1907,45 +1453,7 @@
 
     return {
 
-      tasks: [
-
-        {
-          id: makeId(),
-          name: "打扫卫生",
-          emoji: "🧹",
-          scoreMode: "amount",
-          unit: "分钟",
-          amountBase: 1,
-          xpPerBase: 1,
-          fixedXp: 5,
-          oncePerDay: false
-        },
-
-        {
-          id: makeId(),
-          name: "多邻国学习",
-          emoji: "🦉",
-          scoreMode: "amount",
-          unit: "分钟",
-          amountBase: 1,
-          xpPerBase: 1,
-          fixedXp: 5,
-          oncePerDay: false
-        },
-
-        {
-          id: makeId(),
-          name: "12点前睡觉",
-          emoji: "😴",
-          scoreMode: "fixed",
-          fixedXp: 10,
-          oncePerDay: true,
-          unit: "",
-          amountBase: 1,
-          xpPerBase: 1
-        }
-
-      ],
+      tasks: [],
 
       history: [],
 
@@ -2078,7 +1586,8 @@
           task.xpPerBase = 1;
 
         }
-}
+
+      }
     );
 
 
@@ -2262,9 +1771,6 @@
         .classList.add(
           "active"
         );
-
-
-      renderStats();
 
     }
 
@@ -2714,73 +2220,266 @@
 
 
   /* =========================================
-     全局成就系统
+     成就系统
   ========================================= */
 
-  function getActiveDateSet() {
-
-    return new Set(
-      data.history.map(
-        record =>
-          record.date
-      )
-    );
-
-  }
-
-
-  function getDistinctTaskCount() {
-
-    return new Set(
-      data.history.map(
-        record =>
-          record.taskId
-      )
-    ).size;
-
-  }
-
-
-  function getMaxActionsInOneDay() {
-
-    const counts = {};
-
-
-    data.history.forEach(
-      record => {
-
-        counts[record.date] =
-          (counts[record.date] || 0) + 1;
-
-      }
-    );
-
-
-    const values =
-      Object.values(counts);
-
-
-    return values.length
-      ? Math.max(...values)
-      : 0;
-
-  }
-
-
-  function getAchievementSeries(
-    prefix,
-    milestones,
-    current,
-    names,
-    icons,
-    descriptions
+  function getTaskRecords(
+    taskId
   ) {
+
+    return data.history.filter(
+      record =>
+        record.taskId === taskId
+    );
+
+  }
+
+
+  function getTaskAmount(
+    taskId
+  ) {
+
+    return getTaskRecords(
+      taskId
+    )
+      .filter(
+        record =>
+          record.isAmountRecord === true
+      )
+      .reduce(
+        (total, record) =>
+          total +
+          Number(record.amount || 0),
+        0
+      );
+
+  }
+
+
+  /*
+    每个任务自动生成“完成次数”成就。
+  */
+
+  function getTaskCountAchievements(
+    task
+  ) {
+
+    const milestones = [
+      {
+        target: 1,
+        icon: "🌱",
+        name: "迈出第一步"
+      },
+      {
+        target: 5,
+        icon: "✨",
+        name: "渐入佳境"
+      },
+      {
+        target: 20,
+        icon: "🔥",
+        name: "坚持不懈"
+      },
+      {
+        target: 50,
+        icon: "🏅",
+        name: "熟能生巧"
+      },
+      {
+        target: 100,
+        icon: "👑",
+        name: "百次达成"
+      }
+    ];
+
+
+    const count =
+      getTaskRecords(
+        task.id
+      ).length;
+
+
+    return milestones.map(
+      item => ({
+
+        id:
+          `task-count-${task.id}-${item.target}`,
+
+        icon:
+          item.icon,
+
+        name:
+          item.name,
+
+        description:
+          `完成「${task.name}」${item.target} 次`,
+
+        current:
+          count,
+
+        target:
+          item.target,
+
+        unlocked:
+          count >= item.target
+
+      })
+    );
+
+  }
+
+
+  /*
+    按量任务再自动生成“累计完成量”成就。
+
+    阶段会根据单位稍微智能一点。
+  */
+
+  function getAmountMilestones(
+    unit
+  ) {
+
+    if (
+      unit === "分钟"
+    ) {
+
+      return [
+        30,
+        60,
+        300,
+        1000
+      ];
+
+    }
+
+
+    if (
+      unit === "小时"
+    ) {
+
+      return [
+        1,
+        5,
+        20,
+        50
+      ];
+
+    }
+
+
+    if (
+      unit === "页"
+    ) {
+
+      return [
+        50,
+        200,
+        500,
+        1000
+      ];
+
+    }
+
+
+    if (
+      unit === "件"
+    ) {
+
+      return [
+        5,
+        20,
+        50,
+        100
+      ];
+
+    }
+
+
+    if (
+      unit === "miles"
+    ) {
+
+      return [
+        5,
+        25,
+        100,
+        300
+      ];
+
+    }
+
+
+    if (
+      unit === "$"
+    ) {
+
+      return [
+        100,
+        500,
+        1000,
+        5000
+      ];
+
+    }
+
+
+    return [
+      10,
+      50,
+      100,
+      500
+    ];
+
+  }
+
+
+  function getTaskAmountAchievements(
+    task
+  ) {
+
+    if (
+      task.scoreMode !==
+      "amount"
+    ) {
+
+      return [];
+
+    }
+
+
+    const milestones =
+      getAmountMilestones(
+        task.unit
+      );
+
+
+    const amount =
+      getTaskAmount(
+        task.id
+      );
+
+
+    const names = [
+      "积少成多",
+      "小有成果",
+      "持续积累",
+      "里程碑"
+    ];
+
+
+    const icons = [
+      "⏱️",
+      "💫",
+      "🚀",
+      "🏆"
+    ];
+
 
     return milestones.map(
       (target, index) => ({
 
         id:
-          `${prefix}-${target}`,
+          `task-amount-${task.id}-${target}`,
 
         icon:
           icons[index],
@@ -2789,20 +2488,19 @@
           names[index],
 
         description:
-          descriptions[index]
-            .replace(
-              "{target}",
-              target.toLocaleString()
-            ),
+          `累计「${task.name}」${formatAmount(target, task.unit)}`,
 
         current:
-          current,
+          amount,
 
         target:
           target,
 
+        unit:
+          task.unit,
+
         unlocked:
-          current >= target
+          amount >= target
 
       })
     );
@@ -2810,7 +2508,11 @@
   }
 
 
-  function getGlobalAchievementGroups() {
+  /*
+    全局成就
+  */
+
+  function getGlobalAchievements() {
 
     const totalXp =
       getTotalXp();
@@ -2824,230 +2526,105 @@
       calculateStreak();
 
 
-    const activeDays =
-      getActiveDateSet().size;
-
-
-    const distinctTasks =
-      getDistinctTaskCount();
-
-
-    const maxDailyActions =
-      getMaxActionsInOneDay();
-
-
     return [
 
       {
-        icon: "🌱",
-        title: "人生启动",
-        subtitle: "每一次行动，都算数。",
-        achievements:
-          getAchievementSeries(
-            "action",
-            [1, 10, 50, 100, 500, 1000],
-            totalActions,
-            [
-              "游戏开始",
-              "行动起来",
-              "渐入佳境",
-              "百次行动",
-              "势不可挡",
-              "千次人生"
-            ],
-            [
-              "🌱",
-              "🎯",
-              "✨",
-              "💯",
-              "🚀",
-              "👑"
-            ],
-            [
-              "完成你的第一次行动",
-              "累计完成 {target} 次行动",
-              "累计完成 {target} 次行动",
-              "累计完成 {target} 次行动",
-              "累计完成 {target} 次行动",
-              "累计完成 {target} 次行动"
-            ]
-          )
+        id: "global-action-1",
+        icon: "🌟",
+        name: "游戏开始",
+        description: "完成第一次行动",
+        current: totalActions,
+        target: 1,
+        unlocked:
+          totalActions >= 1
       },
 
+      {
+        id: "global-action-10",
+        icon: "🎯",
+        name: "行动派",
+        description: "累计完成 10 次行动",
+        current: totalActions,
+        target: 10,
+        unlocked:
+          totalActions >= 10
+      },
 
       {
+        id: "global-action-100",
+        icon: "💯",
+        name: "百次行动",
+        description: "累计完成 100 次行动",
+        current: totalActions,
+        target: 100,
+        unlocked:
+          totalActions >= 100
+      },
+
+      {
+        id: "global-xp-100",
         icon: "⚡",
-        title: "经验之路",
-        subtitle: "把现实生活一点点变成经验值。",
-        achievements:
-          getAchievementSeries(
-            "xp",
-            [100, 500, 1000, 2500, 5000, 10000],
-            totalXp,
-            [
-              "能量初现",
-              "经验猎人",
-              "千点经验",
-              "经验蓄能",
-              "成长玩家",
-              "万点人生"
-            ],
-            [
-              "⚡",
-              "💎",
-              "🌟",
-              "🔮",
-              "🏆",
-              "👑"
-            ],
-            [
-              "累计获得 {target} XP",
-              "累计获得 {target} XP",
-              "累计获得 {target} XP",
-              "累计获得 {target} XP",
-              "累计获得 {target} XP",
-              "累计获得 {target} XP"
-            ]
-          )
+        name: "能量初现",
+        description: "累计获得 100 XP",
+        current: totalXp,
+        target: 100,
+        unlocked:
+          totalXp >= 100
       },
 
+      {
+        id: "global-xp-500",
+        icon: "💎",
+        name: "经验猎人",
+        description: "累计获得 500 XP",
+        current: totalXp,
+        target: 500,
+        unlocked:
+          totalXp >= 500
+      },
 
       {
+        id: "global-xp-1000",
+        icon: "👑",
+        name: "千点经验",
+        description: "累计获得 1,000 XP",
+        current: totalXp,
+        target: 1000,
+        unlocked:
+          totalXp >= 1000
+      },
+
+      {
+        id: "global-streak-3",
         icon: "🔥",
-        title: "连续坚持",
-        subtitle: "连续出现，比偶尔完美更难。",
-        achievements:
-          getAchievementSeries(
-            "streak",
-            [3, 7, 14, 30, 60, 100, 365],
-            streak,
-            [
-              "三日连击",
-              "一周坚持",
-              "两周成习",
-              "月度坚持者",
-              "稳定前行",
-              "百日征程",
-              "一年不息"
-            ],
-            [
-              "🔥",
-              "🔥",
-              "🌟",
-              "🌙",
-              "💫",
-              "🏅",
-              "👑"
-            ],
-            [
-              "连续有行动 {target} 天",
-              "连续有行动 {target} 天",
-              "连续有行动 {target} 天",
-              "连续有行动 {target} 天",
-              "连续有行动 {target} 天",
-              "连续有行动 {target} 天",
-              "连续有行动 {target} 天"
-            ]
-          )
+        name: "三日连击",
+        description: "连续行动 3 天",
+        current: streak,
+        target: 3,
+        unlocked:
+          streak >= 3
       },
 
-
       {
-        icon: "📅",
-        title: "生活足迹",
-        subtitle: "中断没关系，回来继续就算成长。",
-        achievements:
-          getAchievementSeries(
-            "active-days",
-            [7, 30, 100, 200, 365],
-            activeDays,
-            [
-              "七日足迹",
-              "月光轨迹",
-              "百日生活",
-              "长线玩家",
-              "一年足迹"
-            ],
-            [
-              "📅",
-              "🗓️",
-              "🌿",
-              "🛤️",
-              "🌍"
-            ],
-            [
-              "累计有行动记录 {target} 天",
-              "累计有行动记录 {target} 天",
-              "累计有行动记录 {target} 天",
-              "累计有行动记录 {target} 天",
-              "累计有行动记录 {target} 天"
-            ]
-          )
+        id: "global-streak-7",
+        icon: "🔥",
+        name: "一周坚持",
+        description: "连续行动 7 天",
+        current: streak,
+        target: 7,
+        unlocked:
+          streak >= 7
       },
 
-
       {
-        icon: "🌈",
-        title: "生活探索",
-        subtitle: "人生不只有一条经验条。",
-        achievements:
-          getAchievementSeries(
-            "variety",
-            [2, 3, 5, 10, 20],
-            distinctTasks,
-            [
-              "第二条支线",
-              "三线并进",
-              "生活展开",
-              "十种可能",
-              "生活收藏家"
-            ],
-            [
-              "🌱",
-              "🌿",
-              "🌈",
-              "🧭",
-              "🗺️"
-            ],
-            [
-              "至少完成过 {target} 个不同任务",
-              "至少完成过 {target} 个不同任务",
-              "至少完成过 {target} 个不同任务",
-              "至少完成过 {target} 个不同任务",
-              "至少完成过 {target} 个不同任务"
-            ]
-          )
-      },
-
-
-      {
-        icon: "🚀",
-        title: "高能时刻",
-        subtitle: "有些日子，就是特别能打。",
-        achievements:
-          getAchievementSeries(
-            "daily-actions",
-            [3, 5, 10, 20],
-            maxDailyActions,
-            [
-              "今日开挂",
-              "状态在线",
-              "高能一天",
-              "极限日"
-            ],
-            [
-              "✨",
-              "⚡",
-              "🚀",
-              "🌋"
-            ],
-            [
-              "单日完成过 {target} 次行动",
-              "单日完成过 {target} 次行动",
-              "单日完成过 {target} 次行动",
-              "单日完成过 {target} 次行动"
-            ]
-          )
+        id: "global-streak-30",
+        icon: "🏆",
+        name: "月度坚持者",
+        description: "连续行动 30 天",
+        current: streak,
+        target: 30,
+        unlocked:
+          streak >= 30
       }
 
     ];
@@ -3057,18 +2634,45 @@
 
   function getAllAchievements() {
 
-    return getGlobalAchievementGroups()
-      .flatMap(
-        group =>
-          group.achievements
-      );
+    let achievements =
+      [];
+
+
+    achievements.push(
+      ...getGlobalAchievements()
+    );
+
+
+    data.tasks.forEach(
+      task => {
+
+        achievements.push(
+          ...getTaskCountAchievements(
+            task
+          )
+        );
+
+
+        achievements.push(
+          ...getTaskAmountAchievements(
+            task
+          )
+        );
+
+      }
+    );
+
+
+    return achievements;
 
   }
 
 
   /*
     记录已经真正解锁过的成就。
-    撤销记录后不会反复弹出同一个已获得成就。
+
+    这样以后即使撤销一条记录，
+    也不会再次疯狂弹出同一个成就。
   */
 
   function checkNewAchievements() {
@@ -3161,6 +2765,11 @@
       );
 
 
+    /*
+      如果一次行动同时解锁多个成就，
+      收下第一个后继续检查。
+    */
+
     setTimeout(
       checkNewAchievements,
       150
@@ -3181,6 +2790,28 @@
           achievement.target
         ) * 100
       );
+
+
+    const currentText =
+      achievement.unit
+        ? formatAmount(
+            achievement.current,
+            achievement.unit
+          )
+        : formatNumber(
+            achievement.current
+          );
+
+
+    const targetText =
+      achievement.unit
+        ? formatAmount(
+            achievement.target,
+            achievement.unit
+          )
+        : formatNumber(
+            achievement.target
+          );
 
 
     return `
@@ -3236,17 +2867,9 @@
 
 
                   <div class="achievement-progress-text">
-                    ${escapeHtml(
-                      formatNumber(
-                        achievement.current
-                      )
-                    )}
+                    ${escapeHtml(currentText)}
                     /
-                    ${escapeHtml(
-                      formatNumber(
-                        achievement.target
-                      )
-                    )}
+                    ${escapeHtml(targetText)}
                   </div>
 
                 </div>
@@ -3264,15 +2887,8 @@
 
   function renderAchievements() {
 
-    const groups =
-      getGlobalAchievementGroups();
-
-
     const all =
-      groups.flatMap(
-        group =>
-          group.achievements
-      );
+      getAllAchievements();
 
 
     const unlockedCount =
@@ -3302,7 +2918,7 @@
           <div>
 
             <div class="achievement-summary-label">
-              全局成就
+              已解锁
             </div>
 
             <div class="achievement-summary-number">
@@ -3341,31 +2957,84 @@
       "";
 
 
-    groups.forEach(
-      group => {
+    /*
+      全局成就
+    */
 
-        const element =
+    const global =
+      getGlobalAchievements();
+
+
+    const globalGroup =
+      document.createElement(
+        "div"
+      );
+
+
+    globalGroup.className =
+      "achievement-group";
+
+
+    globalGroup.innerHTML = `
+
+      <div class="achievement-group-title">
+        🌍 全局成就
+      </div>
+
+      ${global.map(
+        renderAchievementCard
+      ).join("")}
+
+    `;
+
+
+    list.appendChild(
+      globalGroup
+    );
+
+
+    /*
+      每个任务自己的成就
+    */
+
+    data.tasks.forEach(
+      task => {
+
+        const taskAchievements = [
+
+          ...getTaskCountAchievements(
+            task
+          ),
+
+          ...getTaskAmountAchievements(
+            task
+          )
+
+        ];
+
+
+        const group =
           document.createElement(
             "div"
           );
 
 
-        element.className =
+        group.className =
           "achievement-group";
 
 
-        element.innerHTML = `
+        group.innerHTML = `
 
           <div class="achievement-group-title">
-            ${group.icon}
-            ${escapeHtml(group.title)}
+
+            ${escapeHtml(task.emoji)}
+
+            ${escapeHtml(task.name)}
+
           </div>
 
-          <div style="font-size:12px;color:#999;margin:-5px 0 12px 0;">
-            ${escapeHtml(group.subtitle)}
-          </div>
 
-          ${group.achievements.map(
+          ${taskAchievements.map(
             renderAchievementCard
           ).join("")}
 
@@ -3373,1029 +3042,11 @@
 
 
         list.appendChild(
-          element
+          group
         );
 
       }
     );
-
-  }
-
-
-  /* =========================================
-     统计
-  ========================================= */
-
-  function startOfDay(
-    date
-  ) {
-
-    return new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    );
-
-  }
-
-
-  function addDays(
-    date,
-    days
-  ) {
-
-    const result =
-      new Date(date);
-
-
-    result.setDate(
-      result.getDate() + days
-    );
-
-
-    return result;
-
-  }
-
-
-  function getStatsRange() {
-
-    const now =
-      startOfDay(
-        new Date()
-      );
-
-
-    let start;
-    let end;
-    let label;
-
-
-    if (
-      statsPeriod === "week"
-    ) {
-
-      const mondayOffset =
-        (now.getDay() + 6) % 7;
-
-
-      start =
-        addDays(
-          now,
-          -mondayOffset
-        );
-
-
-      end =
-        addDays(
-          start,
-          7
-        );
-
-
-      label =
-        "本周";
-
-    } else if (
-      statsPeriod === "month"
-    ) {
-
-      start =
-        new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          1
-        );
-
-
-      end =
-        new Date(
-          now.getFullYear(),
-          now.getMonth() + 1,
-          1
-        );
-
-
-      label =
-        `${now.getMonth() + 1} 月`;
-
-    } else {
-
-      start =
-        new Date(
-          now.getFullYear(),
-          0,
-          1
-        );
-
-
-      end =
-        new Date(
-          now.getFullYear() + 1,
-          0,
-          1
-        );
-
-
-      label =
-        `${now.getFullYear()} 年`;
-
-    }
-
-
-    return {
-      start,
-      end,
-      label
-    };
-
-  }
-
-
-  function getRecordsInRange(
-    start,
-    end
-  ) {
-
-    const startKey =
-      getDateKey(start);
-
-
-    const endKey =
-      getDateKey(end);
-
-
-    return data.history.filter(
-      record =>
-        record.date >= startKey &&
-        record.date < endKey
-    );
-
-  }
-
-
-  function setStatsPeriod(
-    period
-  ) {
-
-    statsPeriod =
-      period;
-
-
-    [
-      "week",
-      "month",
-      "year"
-    ].forEach(
-      item => {
-
-        document
-          .getElementById(
-            `${item}Tab`
-          )
-          .classList.toggle(
-            "active",
-            item === period
-          );
-
-      }
-    );
-
-
-    renderStats();
-
-  }
-
-
-  function getTrendBuckets(
-    range,
-    records
-  ) {
-
-    const buckets =
-      [];
-
-
-    if (
-      statsPeriod === "week"
-    ) {
-
-      const labels = [
-        "一",
-        "二",
-        "三",
-        "四",
-        "五",
-        "六",
-        "日"
-      ];
-
-
-      for (
-        let i = 0;
-        i < 7;
-        i++
-      ) {
-
-        const date =
-          addDays(
-            range.start,
-            i
-          );
-
-
-        const key =
-          getDateKey(date);
-
-
-        const xp =
-          records
-            .filter(
-              record =>
-                record.date === key
-            )
-            .reduce(
-              (sum, record) =>
-                sum +
-                Number(record.xp || 0),
-              0
-            );
-
-
-        buckets.push({
-          label: labels[i],
-          xp,
-          fullLabel:
-            `${date.getMonth() + 1}/${date.getDate()}`
-        });
-
-      }
-
-
-      return buckets;
-
-    }
-
-
-    if (
-      statsPeriod === "month"
-    ) {
-
-      const daysInMonth =
-        new Date(
-          range.start.getFullYear(),
-          range.start.getMonth() + 1,
-          0
-        ).getDate();
-
-
-      for (
-        let day = 1;
-        day <= daysInMonth;
-        day++
-      ) {
-
-        const date =
-          new Date(
-            range.start.getFullYear(),
-            range.start.getMonth(),
-            day
-          );
-
-
-        const key =
-          getDateKey(date);
-
-
-        const xp =
-          records
-            .filter(
-              record =>
-                record.date === key
-            )
-            .reduce(
-              (sum, record) =>
-                sum +
-                Number(record.xp || 0),
-              0
-            );
-
-
-        buckets.push({
-          label:
-            day === 1 ||
-            day % 5 === 0
-              ? String(day)
-              : "",
-          xp,
-          fullLabel:
-            `${range.start.getMonth() + 1}/${day}`
-        });
-
-      }
-
-
-      return buckets;
-
-    }
-
-
-    for (
-      let month = 0;
-      month < 12;
-      month++
-    ) {
-
-      const monthStart =
-        new Date(
-          range.start.getFullYear(),
-          month,
-          1
-        );
-
-
-      const monthEnd =
-        new Date(
-          range.start.getFullYear(),
-          month + 1,
-          1
-        );
-
-
-      const startKey =
-        getDateKey(monthStart);
-
-
-      const endKey =
-        getDateKey(monthEnd);
-
-
-      const xp =
-        records
-          .filter(
-            record =>
-              record.date >= startKey &&
-              record.date < endKey
-          )
-          .reduce(
-            (sum, record) =>
-              sum +
-              Number(record.xp || 0),
-            0
-          );
-
-
-      buckets.push({
-        label:
-          `${month + 1}月`,
-        xp,
-        fullLabel:
-          `${month + 1} 月`
-      });
-
-    }
-
-
-    return buckets;
-
-  }
-
-
-  function renderTrend(
-    range,
-    records
-  ) {
-
-    const buckets =
-      getTrendBuckets(
-        range,
-        records
-      );
-
-
-    const maxXp =
-      Math.max(
-        1,
-        ...buckets.map(
-          bucket =>
-            bucket.xp
-        )
-      );
-
-
-    const chart =
-      document.getElementById(
-        "trendChart"
-      );
-
-
-    chart.innerHTML =
-      buckets.map(
-        bucket => {
-
-          const height =
-            bucket.xp <= 0
-              ? 2
-              : Math.max(
-                  6,
-                  (
-                    bucket.xp /
-                    maxXp
-                  ) * 100
-                );
-
-
-          const showValue =
-            bucket.xp > 0 &&
-            (
-              statsPeriod !== "month" ||
-              bucket.xp === maxXp
-            );
-
-
-          return `
-            <div
-              class="trend-column"
-              title="${escapeHtml(bucket.fullLabel)} · ${formatNumber(bucket.xp)} XP"
-            >
-              <div class="trend-value">
-                ${showValue
-                  ? formatNumber(bucket.xp)
-                  : ""}
-              </div>
-
-              <div class="trend-bar-wrap">
-                <div
-                  class="trend-bar"
-                  style="height:${height}%"
-                ></div>
-              </div>
-
-              <div class="trend-label">
-                ${escapeHtml(bucket.label)}
-              </div>
-            </div>
-          `;
-
-        }
-      ).join("");
-
-
-    document
-      .getElementById(
-        "trendSubtitle"
-      )
-      .innerText =
-      statsPeriod === "year"
-        ? "按月查看获得的 XP"
-        : "按天查看获得的 XP";
-
-
-    const best =
-      buckets.reduce(
-        (best, bucket) =>
-          bucket.xp > best.xp
-            ? bucket
-            : best,
-        {
-          xp: 0,
-          fullLabel: ""
-        }
-      );
-
-
-    document
-      .getElementById(
-        "trendNote"
-      )
-      .innerText =
-      best.xp > 0
-        ? `最高：${best.fullLabel} · ${formatNumber(best.xp)} XP`
-        : "这段时间还没有 XP 记录";
-
-  }
-
-
-  function renderTaskStats(
-    records
-  ) {
-
-    const container =
-      document.getElementById(
-        "taskStats"
-      );
-
-
-    if (
-      records.length === 0
-    ) {
-
-      container.innerHTML = `
-        <div class="stats-empty-small">
-          这段时间还没有任务记录。
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    const grouped = {};
-
-
-    records.forEach(
-      record => {
-
-        if (
-          !grouped[record.taskId]
-        ) {
-
-          grouped[record.taskId] = [];
-
-        }
-
-
-        grouped[record.taskId].push(
-          record
-        );
-
-      }
-    );
-
-
-    const rows =
-      Object.entries(grouped)
-        .map(
-          ([taskId, taskRecords]) => {
-
-            const task =
-              data.tasks.find(
-                item =>
-                  item.id === taskId
-              );
-
-
-            const name =
-              task
-                ? task.name
-                : "已删除的任务";
-
-
-            const emoji =
-              task
-                ? task.emoji
-                : "⭐";
-
-
-            const xp =
-              taskRecords.reduce(
-                (sum, record) =>
-                  sum +
-                  Number(record.xp || 0),
-                0
-              );
-
-
-            const amountRecords =
-              taskRecords.filter(
-                record =>
-                  record.isAmountRecord === true &&
-                  Number(record.amount || 0) > 0
-              );
-
-
-            let detail;
-
-
-            if (
-              amountRecords.length > 0
-            ) {
-
-              const byUnit = {};
-
-
-              amountRecords.forEach(
-                record => {
-
-                  const unit =
-                    record.unit || "单位";
-
-
-                  byUnit[unit] =
-                    (byUnit[unit] || 0) +
-                    Number(record.amount || 0);
-
-                }
-              );
-
-
-              const amountText =
-                Object.entries(byUnit)
-                  .map(
-                    ([unit, amount]) =>
-                      formatAmount(
-                        amount,
-                        unit
-                      )
-                  )
-                  .join(" + ");
-
-
-              detail =
-                `${amountText} · ${taskRecords.length} 次记录`;
-
-            } else {
-
-              detail =
-                `${taskRecords.length} 次完成`;
-
-            }
-
-
-            return {
-              name,
-              emoji,
-              xp,
-              detail,
-              count:
-                taskRecords.length
-            };
-
-          }
-        )
-        .sort(
-          (a, b) =>
-            b.xp - a.xp ||
-            b.count - a.count
-        );
-
-
-    container.innerHTML =
-      rows.map(
-        row => `
-          <div class="task-stat-row">
-
-            <div class="task-stat-top">
-
-              <div class="task-stat-name">
-                ${escapeHtml(row.emoji)}
-                ${escapeHtml(row.name)}
-              </div>
-
-              <div class="task-stat-xp">
-                +${formatNumber(row.xp)} XP
-              </div>
-
-            </div>
-
-            <div class="task-stat-detail">
-              ${escapeHtml(row.detail)}
-            </div>
-
-          </div>
-        `
-      ).join("");
-
-  }
-
-
-  function getEarliestHistoryYear() {
-
-    const years =
-      data.history
-        .map(
-          record =>
-            Number(
-              String(record.date)
-                .slice(0, 4)
-            )
-        )
-        .filter(
-          year =>
-            Number.isFinite(year)
-        );
-
-
-    return years.length
-      ? Math.min(...years)
-      : new Date().getFullYear();
-
-  }
-
-
-  function changeHeatmapYear(
-    direction
-  ) {
-
-    const currentYear =
-      new Date().getFullYear();
-
-
-    const earliestYear =
-      getEarliestHistoryYear();
-
-
-    heatmapYear =
-      Math.max(
-        earliestYear,
-        Math.min(
-          currentYear,
-          heatmapYear + direction
-        )
-      );
-
-
-    renderHeatmap();
-
-  }
-
-
-  function renderHeatmap() {
-
-    const currentYear =
-      new Date().getFullYear();
-
-
-    const earliestYear =
-      getEarliestHistoryYear();
-
-
-    /*
-      新的一年第一次打开时，
-      自动跟随当前年份。
-      同一次打开期间如果用户手动翻到旧年份，
-      则保留用户正在查看的年份。
-    */
-
-    if (
-      heatmapYear > currentYear
-    ) {
-
-      heatmapYear =
-        currentYear;
-
-    }
-
-
-    if (
-      heatmapYear < earliestYear
-    ) {
-
-      heatmapYear =
-        earliestYear;
-
-    }
-
-
-    document
-      .getElementById(
-        "heatmapYear"
-      )
-      .innerText =
-      `${heatmapYear} 年`;
-
-
-    document
-      .getElementById(
-        "prevHeatmapYear"
-      )
-      .disabled =
-      heatmapYear <= earliestYear;
-
-
-    document
-      .getElementById(
-        "nextHeatmapYear"
-      )
-      .disabled =
-      heatmapYear >= currentYear;
-
-
-    const counts = {};
-
-
-    data.history.forEach(
-      record => {
-
-        if (
-          record.date.startsWith(
-            `${heatmapYear}-`
-          )
-        ) {
-
-          counts[record.date] =
-            (counts[record.date] || 0) + 1;
-
-        }
-
-      }
-    );
-
-
-    const maxCount =
-      Math.max(
-        1,
-        ...Object.values(counts)
-      );
-
-
-    const start =
-      new Date(
-        heatmapYear,
-        0,
-        1
-      );
-
-
-    const end =
-      new Date(
-        heatmapYear + 1,
-        0,
-        1
-      );
-
-
-    const mondayOffset =
-      (start.getDay() + 6) % 7;
-
-
-    const gridStart =
-      addDays(
-        start,
-        -mondayOffset
-      );
-
-
-    let html =
-      "";
-
-
-    for (
-      let date = new Date(gridStart);
-      date < end;
-      date = addDays(date, 1)
-    ) {
-
-      const key =
-        getDateKey(date);
-
-
-      const isTargetYear =
-        date.getFullYear() ===
-        heatmapYear;
-
-
-      const count =
-        isTargetYear
-          ? (counts[key] || 0)
-          : 0;
-
-
-      let level =
-        0;
-
-
-      if (
-        count > 0
-      ) {
-
-        const ratio =
-          count / maxCount;
-
-
-        if (
-          ratio <= .25
-        ) {
-          level = 1;
-        } else if (
-          ratio <= .5
-        ) {
-          level = 2;
-        } else if (
-          ratio <= .75
-        ) {
-          level = 3;
-        } else {
-          level = 4;
-        }
-
-      }
-
-
-      html += `
-        <div
-          class="heat-cell ${level ? `level-${level}` : ""}"
-          title="${key} · ${count} 次行动"
-          style="${isTargetYear ? "" : "visibility:hidden;"}"
-        ></div>
-      `;
-
-    }
-
-
-    document
-      .getElementById(
-        "heatmap"
-      )
-      .innerHTML =
-      html;
-
-  }
-
-
-  function renderStats() {
-
-    const range =
-      getStatsRange();
-
-
-    const records =
-      getRecordsInRange(
-        range.start,
-        range.end
-      );
-
-
-    const totalXp =
-      records.reduce(
-        (sum, record) =>
-          sum +
-          Number(record.xp || 0),
-        0
-      );
-
-
-    const activeDays =
-      new Set(
-        records.map(
-          record =>
-            record.date
-        )
-      ).size;
-
-
-    document
-      .getElementById(
-        "statsSummary"
-      )
-      .innerHTML = `
-
-        <div class="stats-period-label">
-          ${escapeHtml(range.label)}
-        </div>
-
-        <div class="stats-main-xp">
-          ${formatNumber(totalXp)}
-          <span>XP</span>
-        </div>
-
-        <div class="stats-mini-grid">
-
-          <div class="stats-mini">
-            <div class="stats-mini-number">
-              ${records.length}
-            </div>
-            <div class="stats-mini-label">
-              行动次数
-            </div>
-          </div>
-
-          <div class="stats-mini">
-            <div class="stats-mini-number">
-              ${activeDays}
-            </div>
-            <div class="stats-mini-label">
-              活跃天数
-            </div>
-          </div>
-
-          <div class="stats-mini">
-            <div class="stats-mini-number">
-              ${calculateStreak()}
-            </div>
-            <div class="stats-mini-label">
-              当前连续
-            </div>
-          </div>
-
-        </div>
-
-      `;
-
-
-    renderTrend(
-      range,
-      records
-    );
-
-
-    renderTaskStats(
-      records
-    );
-
-
-    renderHeatmap();
 
   }
 
@@ -5282,7 +3933,9 @@
       )
       .value =
       "⭐";
-document
+
+
+    document
       .getElementById(
         "modeFixed"
       )
@@ -5416,7 +4069,9 @@ document
       )
       .value =
       task.emoji;
-document
+
+
+    document
       .getElementById(
         task.scoreMode === "amount"
           ? "modeAmount"
@@ -5696,7 +4351,9 @@ document
         .checked
         ? "amount"
         : "fixed";
-if (!name) {
+
+
+    if (!name) {
 
       alert(
         "请输入任务名称。"
@@ -5755,6 +4412,7 @@ if (!name) {
               "oncePerDay"
             )
             .checked,
+
         unit: "",
         amountBase: 1,
         xpPerBase: 1
@@ -5833,6 +4491,7 @@ if (!name) {
 
         scoreMode:
           "amount",
+
         unit,
         amountBase,
         xpPerBase,
@@ -6341,30 +5000,11 @@ if (!name) {
 
     }
 
-
-    if (
-      currentPage ===
-      "stats"
-    ) {
-
-      renderStats();
-
-    }
-
   }
 
 
   render();
 
-</script>
-
-
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
-  });
-}
 </script>
 
 </body>
